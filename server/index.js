@@ -33,5 +33,5 @@ app.post("/login",(req,res)=>{
 
 app.listen(3001, ()=>{
     console.log("Server is running");
-    console.log("hello");
+    console.log("hello hi");
 })
