@@ -1,6 +1,5 @@
-import React, { useState } from 'react'; // Import useState from React
 import './App.css';
-import 'bootstrap/dist/css/bootstrap.min.css'
+import React, { useState } from 'react'; // Import useState from React
 import axios from 'axios'
 
 function App() {
