@@ -1,37 +1,50 @@
-const express = require('express')
-const mongoose = require('mongoose')
-const cors = require('cors')
+const express = require('express');
+const mongoose = require('mongoose');
+const cors = require('cors');
 
-const app = express()
-app.use(cors())
-app.use(express.json())
+const app = express();
+app.use(cors());
+app.use(express.json());
 
-mongoose.connect('mongodb://127.0.0.1:27017/Login')
+mongoose.connect('mongodb://127.0.0.1:27017/Login');
 
-const UserSchema = new mongoose.Schema({
-    email: String,
-    password: String
-})
+const StudentSchema = new mongoose.Schema({
+    username: String,
+    password: String,
+    role: { type: String, default: 'student' } // Indicate the role in the schema
+});
 
-const UserModel = mongoose.model("users",UserSchema)
+const TeacherSchema = new mongoose.Schema({
+    username: String,
+    password: String,
+    role: { type: String, default: 'teacher' } // Indicate the role in the schema
+});
+
+const StudentModel = mongoose.model("students", StudentSchema);
+const TeacherModel = mongoose.model("teachers", TeacherSchema);
 
 app.post("/login",(req,res)=>{
-    const{email, password} = req.body;
-    UserModel.findOne({email: email})
-    .then(user => {
-        if(user){
-            if(user.password === password){
-                res.json("Login Successfully")
-            }else{
-                res.json("Password is incorrect")
-            }
-        }else{
-            res.json("No record exist")
-        }
-    })
-})
+    const { username, password, role } = req.body;
+    const UserModel = role === 'student' ? StudentModel : TeacherModel;
 
-app.listen(3001, ()=>{
-    console.log("Server is running12");
-    console.log("hello");
-})
+    UserModel.findOne({ username, password })
+        .then(user => {
+            if (user) {
+                if (user.role === role) {
+                    res.json(`${role.charAt(0).toUpperCase() + role.slice(1)} successfully logged in`);
+                } else {
+                    res.json(`You are not authorized as a ${role}`);
+                }
+            } else {
+                res.json("No record exists");
+            }
+        })
+        .catch(error => {
+            res.status(500).json({ error: error.message });
+        });
+});
+
+
+app.listen(3001, () => {
+    console.log("Server is running");
+});
