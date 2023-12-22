@@ -23,7 +23,7 @@ const TeacherSchema = new mongoose.Schema({
 const StudentModel = mongoose.model("students", StudentSchema);
 const TeacherModel = mongoose.model("teachers", TeacherSchema);
 
-app.post("/login",(req,res)=>{
+app.post("/login", (req, res) => {
     const { username, password, role } = req.body;
     const UserModel = role === 'student' ? StudentModel : TeacherModel;
 
@@ -31,20 +31,21 @@ app.post("/login",(req,res)=>{
         .then(user => {
             if (user) {
                 if (user.role === role) {
-                    res.json(`${role.charAt(0).toUpperCase() + role.slice(1)} successfully logged in`);
+                    res.json({ success: true, message: `${role.charAt(0).toUpperCase() + role.slice(1)} successfully logged in` });
                 } else {
-                    res.json(`You are not authorized as a ${role}`);
+                    res.json({ success: false, message: `You are not authorized as a ${role}` });
                 }
             } else {
-                res.json("No record exists");
+                res.json({ success: false, message: "No record exists" });
             }
         })
         .catch(error => {
-            res.status(500).json({ error: error.message });
+            res.status(500).json({ success: false, error: error.message });
         });
 });
 
 
+
 app.listen(3001, () => {
-    console.log("Server is running12");
+    console.log("Server is running");
 });
