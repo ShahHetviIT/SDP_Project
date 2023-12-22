@@ -215,7 +215,7 @@ button:hover:after {
 }
 
 .form-holder span.validation {
-  left: 96%;
+  left: 94%;
 }
 
 .form-holder span.dropDownArrow {
@@ -226,6 +226,27 @@ button:hover:after {
 .login-error{
   color: red;
 }
+
+.login-error {
+  color: red;
+}
+
+.login-error.shake {
+  animation: shake 0.5s;
+}
+
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  10%, 30%, 50%, 70%, 90% {
+    transform: translateX(-5px);
+  }
+  20%, 40%, 60%, 80% {
+    transform: translateX(5px);
+  }
+}
+
 
 @media (max-width: 991px) {
   .inner {

@@ -47,6 +47,8 @@ function Login() {
   };
 
   const handleSubmit = (event) => {
+    const errorDiv = document.getElementById("loginError");
+    errorDiv.classList.remove("shake");
     event.preventDefault();
     // Add your form submission logic here
     axios
@@ -66,7 +68,7 @@ function Login() {
           }
         } else {
           console.log("Login failed:", result.data.message);
-          const errorDiv = document.getElementById("loginError");
+          errorDiv.className = "login-error shake"
           errorDiv.innerHTML = "* Username or password is incorrect";
           errorDiv.style.padding = "0px 0 15px";
         }
@@ -114,7 +116,7 @@ function Login() {
               dangerouslySetInnerHTML={{ __html: passwordValidation }}
             ></span>
           </div>
-          <div id="loginError" className="login-error">
+          <div id="loginError">
             
           </div>
           <div className="form-group">
