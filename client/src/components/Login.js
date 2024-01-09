@@ -6,6 +6,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import "../fonts/linearicons/style.css";
 import { useNavigate } from "react-router-dom";
+import {loginRoute} from "../utils/APIRoutes"
 
 function Login() {
   const [username, setUsername] = useState("");
@@ -40,41 +41,60 @@ function Login() {
     // window.location.href = "next_page.html";
   };
 
-  // Add JavaScript to change the image based on the selected role
+  //JavaScript to change the image based on the selected role
   const handleRoleChange = (event) => {
     const newRole = event.target.value;
     setSelectedRole(newRole);
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     const errorDiv = document.getElementById("loginError");
     errorDiv.classList.remove("shake");
     event.preventDefault();
-    // Add your form submission logic here
-    axios
-      .post("http://localhost:3001/login", {
+  
+    try {
+      const result = await axios.post(loginRoute, {
         username,
         password,
         role: selectedRole,
-      })
-      .then((result) => {
-        if (result.data.success) {
-          console.log("Login successful");
-          // Redirect based on the role
-          if (selectedRole === "teacher") {
-            navigate("/teacherDashboard");
-          } else if (selectedRole === "student") {
-            navigate("/studentDashboard");
-          }
-        } else {
-          console.log("Login failed:", result.data.message);
-          errorDiv.className = "login-error shake"
-          errorDiv.innerHTML = "* Username or password is incorrect";
-          errorDiv.style.padding = "0px 0 15px";
+      });
+  
+      if (result.data.success) {
+        console.log("Login successful");
+        // Store the authentication token securely (e.g., in local storage)
+        localStorage.setItem('authToken', result.data.token);
+        // Redirect based on the role
+        if (selectedRole === "teacher") {
+          navigate("/teacherDashboard");
+        } else if (selectedRole === "student") {
+          navigate("/studentDashboard");
         }
-      })
-      .catch((err) => console.log(err));
+      } else {
+        console.log("Login failed:", result.data.message);
+        errorDiv.className = "login-error shake";
+        errorDiv.innerHTML = "* Username or password is incorrect";
+        errorDiv.style.padding = "0px 0 15px";
+      }
+    } catch (error) {
+      console.error("Error during form submission:", error);
+  
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        console.error("Response status code:", error.response.status);
+        console.error("Response data:", error.response.data);
+      } else if (error.request) {
+        // The request was made but no response was received
+        console.error("No response received");
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        console.error("Request setup error:", error.message);
+      }
+  
+      // Handle the error as needed
+    }
   };
+  
+  
 
   return (
     <div className="wrapper">
