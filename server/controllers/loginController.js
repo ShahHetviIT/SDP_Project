@@ -1,5 +1,6 @@
 const StudentModel = require('../models/studentModel');
 const TeacherModel = require('../models/teacherModel');
+
  // Adjust the path as needed
 const bcrypt = require('bcrypt');
 
@@ -35,3 +36,38 @@ module.exports.login = async (req, res, next) => {
     next(ex);
   }
 };
+
+module.exports.setAvatar = async (req, res, next) => {
+  try {
+    const userId = req.params.id;
+    const avatarImage = req.body.image;
+
+    // Fetch the user data to determine the role
+    const userData = await User.findById(userId);
+
+    if (!userData) {
+      return res.json({ success: false, message: 'User not found' });
+    }
+
+    // Choose the appropriate model based on the user's role
+    const UserModel = userData.role === 'teacher' ? TeacherModel : StudentModel;
+
+    // Update the avatar using the chosen model
+    const updatedUserData = await UserModel.findByIdAndUpdate(
+      userId,
+      {
+        isAvatarImageSet: true,
+        avatarImage,
+      },
+      { new: true }
+    );
+
+    return res.json({
+      isSet: updatedUserData.isAvatarImageSet,
+      image: updatedUserData.avatarImage,
+    });
+  } catch (ex) {
+    next(ex);
+  }
+};
+

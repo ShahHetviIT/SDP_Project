@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Chatbox from './components/Chatbox';
 import Login from './components/Login';
 import StudentDashboard from './components/StudentDashboard'; 
 import TeacherDashboard from './components/TeacherDashboard';
+import SetAvatar from './components/SetAvatar';
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -11,7 +12,7 @@ const App = () => {
 
   useEffect(() => {
     const checkAuthentication = () => {
-      const authToken = localStorage.getItem('authToken');
+      const authToken = localStorage.getItem("user");
       setIsAuthenticated(!!authToken);
       setLoading(false);
     };
@@ -27,25 +28,36 @@ const App = () => {
   return (
     <Router>
       <Routes>
-        <Route path="/login" element={<Login />} />
+      <Route index element={<Login />} />
         {isAuthenticated ? (
-          // If authenticated, allow access to the Chat component and other authenticated routes
           <>
+            <Route path='/setAvatar' element={<SetAvatar />} />
             <Route path="/chatbox" element={<Chatbox />} />
             <Route path="/studentDashboard" element={<StudentDashboard />} />
             <Route path="/teacherDashboard" element={<TeacherDashboard />} />
-
-            {/* Add more authenticated routes as needed */}
           </>
         ) : (
-          // If not authenticated, show the login page by default
-          <Route index element={<Login />} />
+          <Route index path='/login' element={<Login />} />
         )}
-        {/* Redirect to login if an unknown route is accessed */}
-        <Route path="*" element={<Navigate to="/login" />} />
+        <Route path='/login' element={<Login />} />
       </Routes>
     </Router>
   );
 };
+
+
+// const App = () => {
+//   return (
+//     <Router>
+//       <Routes>
+//         <Route index path="/login" element={<Login />} />
+//         <Route path="/studentDashboard" element={<StudentDashboard />} />
+//         <Route path="/teacherDashboard" element={<TeacherDashboard />} />
+//         <Route path='/chatbox' element={<Chatbox/>} />
+//         <Route path="/setAvatar" element={<SetAvatar />} />
+//       </Routes>
+//     </Router>
+//   );
+// };
 
 export default App;

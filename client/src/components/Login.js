@@ -62,13 +62,16 @@ function Login() {
       if (result.data.success) {
         console.log("Login successful");
         // Store the authentication token securely (e.g., in local storage)
-        localStorage.setItem('authToken', result.data.token);
-        // Redirect based on the role
-        if (selectedRole === "teacher") {
-          navigate("/teacherDashboard");
-        } else if (selectedRole === "student") {
-          navigate("/studentDashboard");
-        }
+        localStorage.setItem(
+          "user",
+          JSON.stringify({
+            username: username,
+            role: selectedRole,
+          })
+        );
+  
+        // Always navigate to "/setAvatar" after successful login
+        navigate("/setAvatar");
       } else {
         console.log("Login failed:", result.data.message);
         errorDiv.className = "login-error shake";

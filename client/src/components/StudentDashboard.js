@@ -6,16 +6,17 @@ function StudentDashboard() {
 
   const handleLogout = () => {
     // Remove the authToken from localStorage
-    localStorage.removeItem('authToken');
+    localStorage.clear();
+    navigate("/login");
 
-    // Redirect to the login page
-    navigate('/login');
+    // // Redirect to the login page
+    // navigate('/login');
 
-    // Disable the back button
-    window.history.pushState(null, null, window.location.href);
-    window.onpopstate = function () {
-    window.history.go(1);
-    };
+    // // Disable the back button
+    // window.history.pushState(null, null, window.location.href);
+    // window.onpopstate = function () {
+    // window.history.go(1);
+    // };
 
   };
 
