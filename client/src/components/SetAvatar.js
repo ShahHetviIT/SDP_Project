@@ -25,7 +25,8 @@ export default function SetAvatar() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // if (!localStorage.getItem("user"))
+        console.log("setAvatar");
+        // if (!sessionStorage.getItem("user"))
         //   navigate("/login");
   
         const data = [];
@@ -56,7 +57,7 @@ export default function SetAvatar() {
       toast.error("Please select an avatar", toastOptions);
     } else {
       const user = await JSON.parse(
-        localStorage.getItem("user")
+        sessionStorage.getItem("user")
       );
 
       const { data } = await axios.post(`${setAvatarRoute}/${user._id}`, {
@@ -66,7 +67,7 @@ export default function SetAvatar() {
       if (data.isSet) {
         user.isAvatarImageSet = true;
         user.avatarImage = data.image;
-        localStorage.setItem(
+        sessionStorage.setItem(
           "user",
           JSON.stringify(user)
         );

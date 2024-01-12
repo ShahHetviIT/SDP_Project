@@ -6,7 +6,7 @@ const TeacherDashboard = () => {
 
   const handleLogout = () => {
     // Remove the authToken from localStorage
-    localStorage.clear();
+    sessionStorage.clear();
     navigate("/login");
 
     // Redirect to the login page
