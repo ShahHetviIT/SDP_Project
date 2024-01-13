@@ -59,8 +59,8 @@ export default function SetAvatar() {
       const user = await JSON.parse(
         sessionStorage.getItem("user")
       );
-
-      const { data } = await axios.post(`${setAvatarRoute}/${user._id}`, {
+      console.log(user.userId);
+      const { data } = await axios.post(`${setAvatarRoute}/${user.userId}/${user.role}`, {
         image: avatars[selectedAvatar],
       });
 

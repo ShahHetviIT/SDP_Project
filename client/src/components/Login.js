@@ -66,11 +66,13 @@ function Login() {
 
       if (result.data.success) {
         console.log("Login successful");
+        const userId = result.data.userId;
         // Store the authentication token securely (e.g., in local storage)
         sessionStorage.setItem(
           "user",
           JSON.stringify({
             username: username,
+            userId: userId,
             role: selectedRole,
           })
         );
