@@ -1,13 +1,13 @@
-const StudentModel = require('../models/studentModel');
-const TeacherModel = require('../models/teacherModel');
+const StudentModel = require("../models/studentModel");
+const TeacherModel = require("../models/teacherModel");
 
- // Adjust the path as needed
-const bcrypt = require('bcrypt');
+// Adjust the path as needed
+const bcrypt = require("bcrypt");
 
 module.exports.login = async (req, res, next) => {
   try {
     const { username, password, role } = req.body;
-    const UserModel = role === 'student' ? StudentModel : TeacherModel;
+    const UserModel = role === "student" ? StudentModel : TeacherModel;
 
     UserModel.findOne({ username, password })
       .then((user) => {
@@ -35,7 +35,7 @@ module.exports.login = async (req, res, next) => {
             });
           }
         } else {
-          res.json({ success: false, message: 'No record exists' });
+          res.json({ success: false, message: "No record exists" });
         }
       })
       .catch((error) => {
@@ -129,10 +129,22 @@ module.exports.setAvatar = async (req, res, next) => {
     }
 
     // If neither teacher nor student found
-    return res.json({ success: false, message: 'User not found' });
+    return res.json({ success: false, message: "User not found" });
   } catch (ex) {
     next(ex);
   }
 };
 
+module.exports.getAllUsers = async (req, res, next) => {
+  try {
+    console.log(req.params.id);
+    const users = await TeacherModel.find({
+      _id: { $ne: req.params.id },
+      avatarImage: { $exists: true, $ne: false, $ne: null, $ne: "" } // Exclude users with falsy avatarImage
+    }).select(["username", "avatarImage", "_id"]);
+    return res.json(users);
+  } catch (ex) {
+    next(ex);
+  }
+};
 

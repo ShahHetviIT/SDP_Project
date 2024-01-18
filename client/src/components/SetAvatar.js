@@ -26,8 +26,8 @@ export default function SetAvatar() {
     const fetchData = async () => {
       try {
         console.log("setAvatar");
-        // if (!sessionStorage.getItem("user"))
-        //   navigate("/login");
+        if (!sessionStorage.getItem("user"))
+          navigate("/login");
   
         const data = [];
         for (let i = 0; i < 4; i++) {
@@ -71,6 +71,7 @@ export default function SetAvatar() {
           "user",
           JSON.stringify(user)
         );
+        console.log(user);
         navigate("/");
       } else {
         toast.error("Error setting avatar. Please try again.", toastOptions);

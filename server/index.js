@@ -1,8 +1,9 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const loginRoute = require("./routes/loginRoute")
-
+const loginRoute = require("./routes/loginRoute");
+const messageRoute = require("./routes/messagesRoute");
+const socket = require("socket.io");
 const app = express();
 app.use(cors());
 app.use(express.json());
@@ -53,6 +54,7 @@ require("dotenv").config();
 // });
 
 app.use("/api/auth",loginRoute);
+app.use("/api/messages",messageRoute);
 mongoose
   .connect(process.env.MONGO_URL)
   .then(() => {
@@ -66,4 +68,30 @@ mongoose
 const server = app.listen(process.env.PORT, () =>
   console.log(`Server started on ${process.env.PORT}`)
 );
+
+const io = socket(server, {
+  cors: {
+    origin: "http://localhost:3000",
+    credentials: true,
+  },
+});
+
+global.onlineUsers = new Map();
+io.on("connection", (socket) => {
+  console.log("New user connected");
+
+  socket.on("add-user", (userId) => {
+    console.log(`User ${userId} connected`);
+    onlineUsers.set(userId, socket.id);
+  });
+
+  socket.on("send-msg", (data) => {
+    console.log("Received message:", data);
+    const sendUserSocket = onlineUsers.get(data.to);
+    if (sendUserSocket) {
+      console.log(`Sending message to user ${data.to}`);
+      socket.to(sendUserSocket).emit("msg-recieve", data.msg);
+    }
+  });
+});
 
