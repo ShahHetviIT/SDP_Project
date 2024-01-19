@@ -78,10 +78,10 @@ const io = socket(server, {
 
 global.onlineUsers = new Map();
 io.on("connection", (socket) => {
-  console.log("New user connected");
+  // console.log("New user connected");
 
   socket.on("add-user", (userId) => {
-    console.log(`User ${userId} connected`);
+    // console.log(`User ${userId} connected`);
     onlineUsers.set(userId, socket.id);
   });
 

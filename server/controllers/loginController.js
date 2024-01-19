@@ -27,6 +27,8 @@ module.exports.login = async (req, res, next) => {
                 role.charAt(0).toUpperCase() + role.slice(1)
               } successfully logged in`,
               userId: user._id,
+              avatarImage: user.avatarImage,
+              isAvatarImageSet: user.isAvatarImageSet,
             });
           } else {
             res.json({
@@ -135,10 +137,23 @@ module.exports.setAvatar = async (req, res, next) => {
   }
 };
 
-module.exports.getAllUsers = async (req, res, next) => {
+module.exports.getAllUsersTeachers = async (req, res, next) => {
   try {
     console.log(req.params.id);
     const users = await TeacherModel.find({
+      _id: { $ne: req.params.id },
+      avatarImage: { $exists: true, $ne: false, $ne: null, $ne: "" } // Exclude users with falsy avatarImage
+    }).select(["username", "avatarImage", "_id"]);
+    return res.json(users);
+  } catch (ex) {
+    next(ex);
+  }
+};
+
+module.exports.getAllUsersStudents = async (req, res, next) => {
+  try {
+    console.log(req.params.id);
+    const users = await StudentModel.find({
       _id: { $ne: req.params.id },
       avatarImage: { $exists: true, $ne: false, $ne: null, $ne: "" } // Exclude users with falsy avatarImage
     }).select(["username", "avatarImage", "_id"]);

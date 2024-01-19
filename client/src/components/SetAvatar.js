@@ -72,7 +72,7 @@ export default function SetAvatar() {
           JSON.stringify(user)
         );
         console.log(user);
-        navigate("/");
+        navigate("/chatbox");
       } else {
         toast.error("Error setting avatar. Please try again.", toastOptions);
       }

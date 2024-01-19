@@ -5,7 +5,7 @@ import image from "../images/image-2.png";
 import React, { useState } from "react";
 import axios from "axios";
 import "../fonts/linearicons/style.css";
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { loginRoute } from "../utils/APIRoutes";
 import SetAvatar from "./SetAvatar";
 // import { useHistory } from "react-router-dom";
@@ -17,7 +17,7 @@ function Login() {
   const [passwordValidation, setPasswordValidation] = useState("");
   const [selectedRole, setSelectedRole] = useState("teacher");
   const [loggedIn, setLoggedIn] = useState(false);
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   // const history = useHistory();
 
   const validateForm = () => {
@@ -67,6 +67,8 @@ function Login() {
       if (result.data.success) {
         console.log("Login successful");
         const userId = result.data.userId;
+        const avatarImage = result.data.avatarImage;
+        const isAvatarImageSet = result.data.isAvatarImageSet;
         // Store the authentication token securely (e.g., in local storage)
         sessionStorage.setItem(
           "user",
@@ -74,12 +76,23 @@ function Login() {
             username: username,
             userId: userId,
             role: selectedRole,
+            avatarImage: avatarImage,
+            isAvatarImageSet: isAvatarImageSet,
           })
         );
 
+        const user = await JSON.parse(
+          sessionStorage.getItem("user")
+        );
+
+        console.log(user);
         // Always navigate to "/setAvatar" after successful login
         // navigate("/setAvatar");;
-        setLoggedIn(true);
+        if(isAvatarImageSet){
+          navigate("/chatbox")
+        }else{
+          setLoggedIn(true);
+        }
       } else {
         console.log("Login failed:", result.data.message);
         errorDiv.className = "login-error shake";

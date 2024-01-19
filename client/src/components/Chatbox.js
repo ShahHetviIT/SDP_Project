@@ -4,13 +4,15 @@ import axios from "axios";
 import { io } from "socket.io-client";
 import { useNavigate } from "react-router-dom";
 import Contacts from "../components/Contacts";
-import { allUsersRoute , host} from "../utils/APIRoutes";
+import { allUsersRouteTeachers, allUsersRouteStudents , host} from "../utils/APIRoutes";
 import Welcome from "../components/Welcome";
 import ChatContainer from "./ChatContainer";
+// import { getAllUsersStudents } from "../../../server/controllers/loginController";
 
 const Chatbox = () => {
   const navigate = useNavigate();
-  const [contacts, setContacts] = useState([]);
+  const [teacherContacts, setTeacherContacts] = useState([]);
+  const [studentContacts, setStudentContacts] = useState([]);
   const [currentUser, setCurrentUser] = useState(undefined);
   const [currentChat, setCurrentChat] = useState(undefined);
   const socket = useRef();
@@ -40,8 +42,16 @@ const Chatbox = () => {
         if (currentUser) {
           if (currentUser.isAvatarImageSet) {
             console.log(currentUser.userId);
-            const data = await axios.get(`${allUsersRoute}/${currentUser.userId}`);
-            setContacts(data.data);
+            const teacherdata = await axios.get(`${allUsersRouteTeachers}/${currentUser.userId}`);
+            setTeacherContacts(teacherdata.data);
+
+            const studentData = await axios.get(`${allUsersRouteStudents}/${currentUser.userId}`);
+            setStudentContacts(studentData.data);
+            console.log("hello");
+            
+            console.log(teacherdata.data);
+            console.log(studentData.data);
+
           } else {
             navigate("/setAvatar");
           }
@@ -68,7 +78,8 @@ const Chatbox = () => {
   return (
     <Container>
       <div className="container">
-      <Contacts contacts={contacts} changeChat={handleChatChange} />
+      {/* <Contacts contacts={teacherContacts,studentContacts} changeChat={handleChatChange} /> */}
+      <Contacts teacherContacts={teacherContacts} studentContacts={studentContacts} changeChat={handleChatChange} />
       {currentChat === undefined ? (
             <Welcome />
           ) : (
