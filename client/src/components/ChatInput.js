@@ -3,10 +3,14 @@ import { BsEmojiSmileFill } from "react-icons/bs";
 import { IoMdSend } from "react-icons/io";
 import styled from "styled-components";
 import Picker from "emoji-picker-react";
+import axios from "axios";
+// import getSocket from "../components/ChatContainer";
 
-export default function ChatInput({ handleSendMsg }) {
+export default function ChatInput({ handleSendMsg, currentChat, getSocket }) {
   const [msg, setMsg] = useState("");
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  // const [files, setFiles] = useState("");
+
   const handleEmojiPickerhideShow = () => {
     setShowEmojiPicker(!showEmojiPicker);
   };
@@ -25,6 +29,59 @@ export default function ChatInput({ handleSendMsg }) {
     }
   };
 
+  const fileInputRef = React.createRef();
+
+  const handleButtonClick = () => {
+    fileInputRef.current.click();
+  };
+
+  const sendFile = async (e) => {
+    e.preventDefault();
+    // Using spread syntax to create a new array with the selected files
+    const selectedFiles = [...e.target.files];
+    const data = await JSON.parse(sessionStorage.getItem("user"));
+    const formData = new FormData();
+    console.log(selectedFiles[0].name);
+    formData.append("title", selectedFiles[0].name);
+    formData.append("file", selectedFiles[0]);
+    formData.append("from", data.userId); // Assuming data.userId is the 'from' value
+    formData.append("to", currentChat._id);
+
+    console.log(formData);
+
+    // handleSendMsg(formData);
+
+    const result = await axios.post(
+      "http://localhost:3001/api/messages/upload-files",
+      formData,
+      {
+        headers: { "Content-Type": "multipart/form-data" },
+      }
+    );
+    console.log(result);
+    const fileName = selectedFiles[0].name;
+
+    getSocket(fileName,selectedFiles[0].name)
+
+    
+    // console.log("bedore");
+   
+    // console.log("after");
+  };
+
+  // useEffect(() => {
+  //   getPdf();
+  // }, []);
+
+  // // Correct
+  // const getPdf = async () => {
+  //   const result = await axios.get(
+  //     "http://localhost:3001/api/messages/get-files"
+  //   );
+  //   console.log(result.data.data);
+  //   setFiles((prevFiles) => [...prevFiles, ...result.data.data]);
+  // };
+
   return (
     <Container>
       <div className="button-container">
@@ -33,6 +90,26 @@ export default function ChatInput({ handleSendMsg }) {
           {showEmojiPicker && <Picker onEmojiClick={handleEmojiClick} />}
         </div>
       </div>
+      <div>
+        <button
+          className="attachmentButton"
+          aria-label="Attach File"
+          onClick={handleButtonClick}
+        >
+          <i className="fa-solid fa-paperclip fa-xl"></i>
+        </button>
+
+        {/* Hidden file input */}
+        <input
+          type="file"
+          id="fileInput"
+          ref={fileInputRef}
+          onChange={sendFile}
+          style={{ display: "none" }}
+          multiple
+        />
+      </div>
+
       <form className="input-container" onSubmit={(event) => sendChat(event)}>
         <input
           type="text"
@@ -44,16 +121,23 @@ export default function ChatInput({ handleSendMsg }) {
           <IoMdSend />
         </button>
       </form>
+      {/* <div>
+        <input type="file" onChange={sendFile}/>
+      </div> */}
     </Container>
   );
 }
 
 const Container = styled.div`
-  display: grid;
+  display: flex;
   align-items: center;
-  grid-template-columns: 5% 95%;
+  // grid-template-columns: 5% 95%;
   background-color: #080420;
   padding: 0 2rem;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
   @media screen and (min-width: 720px) and (max-width: 1080px) {
     padding: 0 1rem;
     gap: 1rem;
@@ -169,5 +253,41 @@ const Container = styled.div`
         color: white;
       }
     }
+  }
+  .attachmentButton {
+    background: transparent;
+  }
+  .attachmentButton:hover {
+    background: none;
+  }
+  .attachmentButton:before,
+  .attachmentButton:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    background-color: transparent;
+    -webkit-transition: none;
+    -moz-transition: none;
+    -o-transition: none;
+    transition: none;
+    -webkit-transform: none;
+    transform: none;
+    -webkit-transition-timing-function: none;
+    transition-timing-function: none;
+  }
+
+  .attachmentButton:after {
+    -webkit-transition-delay: 0s;
+    transition-delay: 0s;
+  }
+
+  .attachmentButton:hover:before,
+  .attachmentButton:hover:after {
+    -webkit-transform: translate(0, 0);
+    transform: translate(0, 0);
   }
 `;

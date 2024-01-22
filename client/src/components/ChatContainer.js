@@ -10,6 +10,7 @@ export default function ChatContainer({ currentChat, currentUser, socket }) {
   const [messages, setMessages] = useState([]);
   const scrollRef = useRef();
   const [arrivalMessage, setArrivalMessage] = useState(null);
+  const [allImage, setAllImage] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -24,18 +25,14 @@ export default function ChatContainer({ currentChat, currentUser, socket }) {
         console.error("Error fetching messages:", error);
       }
     };
-  
+
     fetchData(); // Call the async function
-  
   }, [currentChat]);
-  
 
   useEffect(() => {
     const getCurrentChat = async () => {
       if (currentChat) {
-        await JSON.parse(
-          sessionStorage.getItem("user")
-        ).userId;
+        await JSON.parse(sessionStorage.getItem("user")).userId;
       }
     };
     getCurrentChat();
@@ -61,28 +58,57 @@ export default function ChatContainer({ currentChat, currentUser, socket }) {
   //   setMessages(msgs);
   // };
 
-  const handleSendMsg = async (msg) => {
+  const getSocket = async (msg,title) => {
+    console.log(msg);
+    const data = await JSON.parse(sessionStorage.getItem("user"));
     try {
-      const data = await JSON.parse(sessionStorage.getItem("user"));
-  
-      // Update state using prevState to ensure correctness
       setMessages((prevState) => [
         ...prevState,
         { fromSelf: true, message: msg },
       ]);
-  
-      if (socket.current.connected) {
-        console.log("msg send")
+      if (socket.current && socket.current.connected) {
+        console.log("msg send");
         socket.current.emit("send-msg", {
           to: currentChat._id,
           from: data.userId,
           msg,
         });
       }
+      getPdf();
+    } catch (err) {
+      console.error("Error sending message:", err);
+    }
+  };
+
+  useEffect(() => {
+    getPdf();
+  }, []);
+
+  // Correct
+  const getPdf = async () => {
+    const result = await axios.get(
+      "http://localhost:3001/api/messages/get-files"
+    );
+    console.log(result.data.data);
+    setAllImage(result.data.data);
+  };
+
+  const showPdf=(pdf)=>{
+    console.log(pdf);
+    window.open(`http://localhost:3001/files/${pdf}`,"_blank","noreferrer");
+  }
+
+  const handleSendMsg = async (msg) => {
+    try {
+      // const data = await JSON.parse(sessionStorage.getItem("user"));
+
+      // Update state using prevState to ensure correctness
+
+      getSocket(msg,null);
     } catch (error) {
       console.error("Error preparing message:", error);
     }
-  
+
     try {
       const data = await JSON.parse(sessionStorage.getItem("user"));
       await axios.post(sendMessageRoute, {
@@ -90,12 +116,13 @@ export default function ChatContainer({ currentChat, currentUser, socket }) {
         to: currentChat._id,
         message: msg,
       });
+
+      // console.log(result);
     } catch (error) {
       console.error("Error sending message:", error);
     }
   };
-  
-  
+
   useEffect(() => {
     if (socket.current) {
       socket.current.on("msg-recieve", (msg) => {
@@ -106,7 +133,6 @@ export default function ChatContainer({ currentChat, currentUser, socket }) {
           console.error("Received malformed message:", msg);
         }
       });
-      
 
       // Handle potential error events
       socket.current.on("error", (error) => {
@@ -117,6 +143,7 @@ export default function ChatContainer({ currentChat, currentUser, socket }) {
 
   useEffect(() => {
     arrivalMessage && setMessages((prev) => [...prev, arrivalMessage]);
+    getPdf();
   }, [arrivalMessage]);
 
   useEffect(() => {
@@ -143,22 +170,55 @@ export default function ChatContainer({ currentChat, currentUser, socket }) {
           </div>
           <div className="chat-messages">
             {messages.map((message) => {
+              const isFileAttachment = /\.(pdf|jpg|png|docx|txt)$/i.test(
+                message.message
+              );
+
+              let imageData = null;
+              let imagename = null;
+              // Find the matching data in allImage
+              {allImage.map((image)=>{
+                if(message.message === image.message.text){
+                    // console.log(image.pdf);
+                    imageData = image.pdf;
+                    imagename = image.message.text;
+                }
+              })
+
+              }
+              console.log(imageData + "----" + imagename);
+
               return (
                 <div ref={scrollRef} key={uuidv4()}>
                   <div
                     className={`message ${
                       message.fromSelf ? "sended" : "recieved"
-                    }`}
+                    } ${isFileAttachment ? "file-attachment" : ""}`}
                   >
-                    <div className="content ">
-                      <p>{message.message}</p>
+                    <div className="content">
+                      {isFileAttachment ? (
+                        <div className="specialMsg">
+                          <p>{message.message}</p>
+                          <button className="showBtn" onClick={() => showPdf(imageData)}>
+                            <i className="fa-regular fa-file"></i>
+                          </button>
+                          {/* Additional content related to imageData can be displayed here */}
+                        </div>
+                      ) : (
+                        <p>{message.message}</p>
+                      )}
                     </div>
                   </div>
                 </div>
               );
             })}
           </div>
-          <ChatInput handleSendMsg={handleSendMsg} />
+
+          <ChatInput
+            handleSendMsg={handleSendMsg}
+            currentChat={currentChat}
+            getSocket={getSocket}
+          />
         </Container>
       )}
     </>
@@ -170,6 +230,22 @@ const Container = styled.div`
   grid-template-rows: 10% 80% 10%;
   gap: 0.1rem;
   overflow: hidden;
+  .specialMsg {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+  }
+  .showBtn {
+    margin: 0;
+    height: auto;
+    border-radius: 5px;
+    padding: 10px;
+    width: auto;
+    i {
+      color: black;
+    }
+  }
   @media screen and (min-width: 720px) and (max-width: 1080px) {
     grid-template-rows: 15% 70% 15%;
   }

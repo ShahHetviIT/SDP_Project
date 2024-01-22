@@ -2,6 +2,10 @@ const mongoose = require("mongoose");
 
 const MessageSchema = mongoose.Schema(
   {
+    pdf: {
+      type: String,
+      default: null,
+    },
     message: {
       text: { type: String, required: true },
     },

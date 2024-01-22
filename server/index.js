@@ -1,13 +1,15 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const cors = require('cors');
+const express = require("express");
+const mongoose = require("mongoose");
+const cors = require("cors");
 const loginRoute = require("./routes/loginRoute");
 const messageRoute = require("./routes/messagesRoute");
+// const files = require("./routes/files");
 const socket = require("socket.io");
 const app = express();
 app.use(cors());
 app.use(express.json());
 require("dotenv").config();
+app.use("/files",express.static("files"));
 
 // mongoose.connect('mongodb://127.0.0.1:27017/Login');
 
@@ -47,14 +49,38 @@ require("dotenv").config();
 //         });
 // });
 
-
-
 // app.listen(3001, () => {
 //     console.log("Server is running");
 // });
 
-app.use("/api/auth",loginRoute);
-app.use("/api/messages",messageRoute);
+app.use("/api/auth", loginRoute);
+app.use("/api/messages", messageRoute);
+// app.use("",files);
+
+// const multer  = require('multer');
+
+// const storage = multer.diskStorage({
+//   destination: function (req, file, cb) {
+//     cb(null, './files')
+//   },
+//   filename: function (req, file, cb) {
+//     const uniqueSuffix = Date.now()
+//     cb(null,uniqueSuffix+file.originalname)
+//   }
+// })
+
+// const upload = multer({ storage: storage })
+// const upload = multer({ dest: './files' })
+
+// app.post("/upload-files",upload.single("file"), async (req,res) => {
+//   console.log(req.file);
+//   res.send("hii");
+// })
+
+app.get("/", async (req, res) => {
+  res.send("Success!!!!!!");
+});
+
 mongoose
   .connect(process.env.MONGO_URL)
   .then(() => {
@@ -63,7 +89,6 @@ mongoose
   .catch((err) => {
     console.error(err.message);
   });
-
 
 const server = app.listen(process.env.PORT, () =>
   console.log(`Server started on ${process.env.PORT}`)
@@ -94,4 +119,3 @@ io.on("connection", (socket) => {
     }
   });
 });
-
