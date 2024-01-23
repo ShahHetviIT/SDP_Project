@@ -170,7 +170,7 @@ export default function ChatContainer({ currentChat, currentUser, socket }) {
           </div>
           <div className="chat-messages">
             {messages.map((message) => {
-              const isFileAttachment = /\.(pdf|jpg|png|docx|txt)$/i.test(
+              const isFileAttachment = /\.(pdf|jpg|png|docx|txt|zip)$/i.test(
                 message.message
               );
 
