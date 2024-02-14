@@ -6,6 +6,7 @@ import StudentDashboard from "./components/StudentDashboard";
 import TeacherDashboard from "./components/TeacherDashboard";
 import SetAvatar from "./components/SetAvatar";
 import Chatbox from "./components/Chatbox";
+import AttendanceTeacher from "./components/AttendanceTeacher";
 
 
 const App = () => {
@@ -36,6 +37,7 @@ const App = () => {
         <Route path="/studentDashboard" element={<StudentDashboard />} />
         <Route path="/teacherDashboard" element={<TeacherDashboard />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/attendanceTeacher" element={<AttendanceTeacher/>}/>
       </Routes>
     </Router>
   );
