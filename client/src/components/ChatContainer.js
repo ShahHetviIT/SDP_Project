@@ -58,7 +58,7 @@ export default function ChatContainer({ currentChat, currentUser, socket }) {
   //   setMessages(msgs);
   // };
 
-  const getSocket = async (msg,title) => {
+  const getSocket = async (msg, title) => {
     console.log(msg);
     const data = await JSON.parse(sessionStorage.getItem("user"));
     try {
@@ -93,10 +93,10 @@ export default function ChatContainer({ currentChat, currentUser, socket }) {
     setAllImage(result.data.data);
   };
 
-  const showPdf=(pdf)=>{
+  const showPdf = (pdf) => {
     console.log(pdf);
-    window.open(`http://localhost:3001/files/${pdf}`,"_blank","noreferrer");
-  }
+    window.open(`http://localhost:3001/files/${pdf}`, "_blank", "noreferrer");
+  };
 
   const handleSendMsg = async (msg) => {
     try {
@@ -104,7 +104,7 @@ export default function ChatContainer({ currentChat, currentUser, socket }) {
 
       // Update state using prevState to ensure correctness
 
-      getSocket(msg,null);
+      getSocket(msg, null);
     } catch (error) {
       console.error("Error preparing message:", error);
     }
@@ -156,12 +156,29 @@ export default function ChatContainer({ currentChat, currentUser, socket }) {
         <Container>
           <div className="chat-header">
             <div className="user-details">
-              <div className="avatar">
+              {/* <div className="avatar">
                 <img
                   src={`data:image/svg+xml;base64,${currentChat.avatarImage}`}
                   alt=""
                 />
+              </div> */}
+              {currentChat.isAvatarImageSet && (
+                <div className="avatar">
+                  <img
+                    src={`data:image/svg+xml;base64,${currentChat.avatarImage}`}
+                    alt=""
+                  />
+                </div>
+              )}
+              {currentChat.isProfileImageSet && (
+                <div className="avatar">
+                <img
+                  className="userProfile"
+                  src={`http://localhost:3001/files/${currentChat.profileImage}`}
+                  alt="avatar"
+                />
               </div>
+              )}
               <div className="username">
                 <h3>{currentChat.username}</h3>
               </div>
@@ -177,15 +194,16 @@ export default function ChatContainer({ currentChat, currentUser, socket }) {
               let imageData = null;
               let imagename = null;
               // Find the matching data in allImage
-              {allImage.map((image)=>{
-                if(message.message === image.message.text){
+              {
+                allImage.map((image) => {
+                  if (message.message === image.message.text) {
                     // console.log(image.pdf);
                     imageData = image.pdf;
                     imagename = image.message.text;
-                }
-              })
-
+                  }
+                });
               }
+
               console.log(imageData + "----" + imagename);
 
               return (
@@ -199,7 +217,10 @@ export default function ChatContainer({ currentChat, currentUser, socket }) {
                       {isFileAttachment ? (
                         <div className="specialMsg">
                           <p>{message.message}</p>
-                          <button className="showBtn" onClick={() => showPdf(imageData)}>
+                          <button
+                            className="showBtn"
+                            onClick={() => showPdf(imageData)}
+                          >
                             <i className="fa-regular fa-file"></i>
                           </button>
                           {/* Additional content related to imageData can be displayed here */}
@@ -261,6 +282,8 @@ const Container = styled.div`
       .avatar {
         img {
           height: 3rem;
+          width: 3rem;
+          border-radius: 50%;
         }
       }
       .username {
