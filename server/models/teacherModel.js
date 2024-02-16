@@ -5,6 +5,8 @@ const teacherSchema = new mongoose.Schema({
   password: String,
   isAvatarImageSet: Boolean,
   avatarImage: String,
+  profileImage: String,
+  isProfileImageSet: Boolean,
   role: { type: String, default: 'teacher' },
 });
 

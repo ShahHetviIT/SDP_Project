@@ -21,7 +21,7 @@ module.exports.login = async (req, res, next) => {
             //     role: user.role,
             //   })
             // );
-            return res.json({
+            const varName = {
               success: true,
               message: `${
                 role.charAt(0).toUpperCase() + role.slice(1)
@@ -29,7 +29,11 @@ module.exports.login = async (req, res, next) => {
               userId: user._id,
               avatarImage: user.avatarImage,
               isAvatarImageSet: user.isAvatarImageSet,
-            });
+              profileImage: user.profileImage,
+              isProfileImageSet: user.isProfileImageSet,
+            };
+            console.log(varName);
+            return res.json(varName);
           } else {
             res.json({
               success: false,
@@ -142,38 +146,51 @@ module.exports.getAllUsersTeachers = async (req, res, next) => {
     console.log(req.params.id);
     const users = await TeacherModel.find({
       _id: { $ne: req.params.id },
-      avatarImage: { $exists: true, $ne: false, $ne: null, $ne: "" } // Exclude users with falsy avatarImage
-    }).select(["username", "avatarImage", "_id"]);
+      $or: [
+        { avatarImage: { $exists: true, $ne: false, $ne: null, $ne: "" } },
+        { profileImage: { $exists: true, $ne: false, $ne: null, $ne: "" } }
+      ]
+    }).select(["username", "avatarImage", "profileImage", "isAvatarImageSet", "isProfileImageSet", "_id"]);
+    console.log(users);
     return res.json(users);
   } catch (ex) {
     next(ex);
   }
 };
+
+
 
 module.exports.getAllUsersStudents = async (req, res, next) => {
   try {
     console.log(req.params.id);
     const users = await StudentModel.find({
       _id: { $ne: req.params.id },
-      avatarImage: { $exists: true, $ne: false, $ne: null, $ne: "" } // Exclude users with falsy avatarImage
-    }).select(["username", "avatarImage", "_id"]);
+      $or: [
+        { avatarImage: { $exists: true, $ne: false, $ne: null, $ne: "" } },
+        { profileImage: { $exists: true, $ne: false, $ne: null, $ne: "" } }
+      ]
+    }).select(["username", "avatarImage", "profileImage", "isAvatarImageSet", "isProfileImageSet", "_id"]);
     return res.json(users);
   } catch (ex) {
     next(ex);
   }
 };
 
-module.exports.getAllStudents = async(req,res,next) => {
+
+
+
+module.exports.getAllStudents = async (req, res, next) => {
   try {
-    const users = await StudentModel.find({
-      
-    }).select(["username", "rollNo", "_id"]);
+    const users = await StudentModel.find({}).select([
+      "username",
+      "rollNo",
+      "_id",
+    ]);
     return res.json(users);
   } catch (ex) {
     next(ex);
   }
 };
-
 
 // const StudentModel = require('../models/studentModel');
 
@@ -197,12 +214,14 @@ module.exports.addMarksAttendance = async (req, res, next) => {
       }
 
       // Update the marks and attendance data for each subject
-      for (const [subject, { marks, attendance, type }] of Object.entries(studentMarks)) {
-        if (type === 'lecture') {
+      for (const [subject, { marks, attendance, type }] of Object.entries(
+        studentMarks
+      )) {
+        if (type === "lecture") {
           // Update lecture marks and attendance
           student[sessional].marksLecture[subject] = marks;
-          student[sessional].attendanceLecture[subject] = attendance;          
-        } else if (type === 'lab') {
+          student[sessional].attendanceLecture[subject] = attendance;
+        } else if (type === "lab") {
           // Update lab attendance only
           student[sessional].attendanceLab[subject] = attendance;
         }
@@ -225,12 +244,15 @@ module.exports.addMarksAttendance = async (req, res, next) => {
       }
 
       // Update the total marks and attendance data for each subject
-      for (const [subject, { totalMarks, totalAttendance, type }] of Object.entries(total)) {
-        if (type === 'lecture') {
+      for (const [
+        subject,
+        { totalMarks, totalAttendance, type },
+      ] of Object.entries(total)) {
+        if (type === "lecture") {
           // Update lecture total marks and attendance
           student[sessional].totalExamMarks[subject] = totalMarks;
           student[sessional].totalAttendanceLecture[subject] = totalAttendance;
-        } else if (type === 'lab') {
+        } else if (type === "lab") {
           // Update lab total attendance only
           student[sessional].totalAttendanceLab[subject] = totalAttendance;
         }
@@ -240,13 +262,19 @@ module.exports.addMarksAttendance = async (req, res, next) => {
       await student.save();
     }
 
-    res.status(200).json({ success: true, message: 'Marks and attendance added successfully.' });
+    res
+      .status(200)
+      .json({
+        success: true,
+        message: "Marks and attendance added successfully.",
+      });
   } catch (error) {
-    console.log('Error:', error);
-    res.status(500).json({ success: false, message: 'Error adding marks and attendance.' });
+    console.log("Error:", error);
+    res
+      .status(500)
+      .json({ success: false, message: "Error adding marks and attendance." });
   }
 };
-
 
 // Controller function to get marks and attendance data for students
 module.exports.getStudentMarksAttendance = async (req, res, next) => {
@@ -277,7 +305,6 @@ module.exports.getStudentMarksAttendance = async (req, res, next) => {
   }
 };
 
-
 // Controller function to get total marks and attendance data for students
 module.exports.getTotalStudentMarksAttendance = async (req, res, next) => {
   try {
@@ -288,7 +315,9 @@ module.exports.getTotalStudentMarksAttendance = async (req, res, next) => {
     const firstStudent = await StudentModel.findOne({ _id: studentIds[0] });
 
     if (!firstStudent) {
-      return res.status(404).json({ success: false, message: 'Student not found' });
+      return res
+        .status(404)
+        .json({ success: false, message: "Student not found" });
     }
 
     const totalMarksAttendanceData = {
@@ -304,24 +333,21 @@ module.exports.getTotalStudentMarksAttendance = async (req, res, next) => {
   }
 };
 
-
-
 module.exports.getTeacherSubjects = async (req, res, next) => {
   try {
     const userId = req.params.id;
     // console.log("User ID:", userId);
-    
+
     const teacherData = await TeacherModel.findById(userId);
     if (!teacherData) {
-      return res.status(404).json({ error: 'Teacher not found' });
+      return res.status(404).json({ error: "Teacher not found" });
     }
 
     // console.log(teacherData);
-    
+
     return res.json(teacherData);
-    
   } catch (err) {
     console.error("Error:", err);
     next(err);
   }
-}
+};

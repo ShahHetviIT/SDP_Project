@@ -4,7 +4,11 @@ import axios from "axios";
 import { io } from "socket.io-client";
 import { useNavigate } from "react-router-dom";
 import Contacts from "../components/Contacts";
-import { allUsersRouteTeachers, allUsersRouteStudents , host} from "../utils/APIRoutes";
+import {
+  allUsersRouteTeachers,
+  allUsersRouteStudents,
+  host,
+} from "../utils/APIRoutes";
 import Welcome from "../components/Welcome";
 import ChatContainer from "./ChatContainer";
 // import { getAllUsersStudents } from "../../../server/controllers/loginController";
@@ -24,9 +28,7 @@ const Chatbox = () => {
           //console.log("logon");
           navigate("/login");
         } else {
-          setCurrentUser(
-            await JSON.parse(sessionStorage.getItem("user"))
-          );
+          setCurrentUser(await JSON.parse(sessionStorage.getItem("user")));
         }
       } catch (error) {
         console.error("Error fetching user data:", error);
@@ -40,20 +42,21 @@ const Chatbox = () => {
     const fetchContacts = async () => {
       try {
         if (currentUser) {
-          if (currentUser.isAvatarImageSet) {
-            console.log(currentUser.userId);
-            const teacherdata = await axios.get(`${allUsersRouteTeachers}/${currentUser.userId}`);
+          
+          if (currentUser.isAvatarImageSet || currentUser.isProfileImageSet) {
+            const teacherdata = await axios.get(
+              `${allUsersRouteTeachers}/${currentUser.userId}`
+            );
             setTeacherContacts(teacherdata.data);
-
-            const studentData = await axios.get(`${allUsersRouteStudents}/${currentUser.userId}`);
-            setStudentContacts(studentData.data);
-            console.log("hello");
-            
             console.log(teacherdata.data);
+  
+            const studentData = await axios.get(
+              `${allUsersRouteStudents}/${currentUser.userId}`
+            );
+            setStudentContacts(studentData.data);
             console.log(studentData.data);
-
           } else {
-            navigate("/setAvatar");
+            navigate("/select");
           }
         }
       } catch (error) {
@@ -78,13 +81,20 @@ const Chatbox = () => {
   return (
     <Container>
       <div className="container">
-      {/* <Contacts contacts={teacherContacts,studentContacts} changeChat={handleChatChange} /> */}
-      <Contacts teacherContacts={teacherContacts} studentContacts={studentContacts} changeChat={handleChatChange} />
-      {currentChat === undefined ? (
-            <Welcome />
-          ) : (
-            <ChatContainer currentChat={currentChat} currentUser={currentUser} socket={socket} />
-          )}
+        <Contacts
+          teacherContacts={teacherContacts}
+          studentContacts={studentContacts}
+          changeChat={handleChatChange}
+        />
+        {currentChat === undefined ? (
+          <Welcome />
+        ) : (
+          <ChatContainer
+            currentChat={currentChat}
+            currentUser={currentUser}
+            socket={socket}
+          />
+        )}
       </div>
     </Container>
   );
@@ -111,6 +121,6 @@ const Container = styled.div`
       grid-template-rows: 35% 65%;
     }
   }
-};`
+};`;
 
 export default Chatbox;

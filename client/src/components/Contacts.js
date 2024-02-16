@@ -194,13 +194,15 @@ export default function Contacts({
   const [currentSelected, setCurrentSelected] = useState(undefined);
   const [teacherDivOpen, setTeacherDivOpen] = useState(false);
   const [studentDivOpen, setStudentDivOpen] = useState(false);
+  const [currentUserProfile, setCurrentUserProfile] = useState(undefined);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const data = await JSON.parse(sessionStorage.getItem("user"));
         setCurrentUserName(data.username);
-        setCurrentUserImage(data.avatarImage);
+        if (data.isAvatarImageSet) setCurrentUserImage(data.avatarImage);
+        else setCurrentUserProfile(data.profileImage);
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
@@ -230,98 +232,140 @@ export default function Contacts({
 
   return (
     <>
-      {currentUserImage && currentUserImage && (
-        <Container>
-          <div className="brand">
-            <img src={Logo} alt="logo" />
-            <h3>Mentor Mingle</h3>
-          </div>
-          <div className="contacts">
-            <div className="contactsList">
-              <button className="teachersOpenButton" onClick={toggleTeacherDiv}>
-                <div>Teachers</div>
-                <div>
-                  <i
-                    className={`fa-solid fa-caret-${
-                      teacherDivOpen ? "up" : "down"
-                    }`}
-                  ></i>
-                </div>
-              </button>
+      {(currentUserImage ||
+        currentUserProfile) && (
+          <Container>
+            <div className="brand">
+              <img src={Logo} alt="logo" />
+              <h3>Mentor Mingle</h3>
             </div>
-            {teacherDivOpen && (
-              <>
-                {teacherContacts.map((contact, index) => (
-                  <div
-                    key={contact._id}
-                    className={`contact ${
-                      index === currentSelected ? "selected" : ""
-                    }`}
-                    onClick={() => changeCurrentChat(index, contact)}
-                  >
-                    <div className="avatar">
-                      <img
-                        src={`data:image/svg+xml;base64,${contact.avatarImage}`}
-                        alt=""
-                      />
-                    </div>
-                    <div className="username">
-                      <h3>{contact.username}</h3>
-                    </div>
+            <div className="contacts">
+              <div className="contactsList">
+                <button
+                  className="teachersOpenButton"
+                  onClick={toggleTeacherDiv}
+                >
+                  <div>Teachers</div>
+                  <div>
+                    <i
+                      className={`fa-solid fa-caret-${
+                        teacherDivOpen ? "up" : "down"
+                      }`}
+                    ></i>
                   </div>
-                ))}
-              </>
-            )}
-            <div className="contactsList">
-              <button className="studentsOpenButton" onClick={toggleStudentDiv}>
-                <div>Students</div>
-                <div>
-                  <i
-                    className={`fa-solid fa-caret-${
-                      studentDivOpen ? "up" : "down"
-                    }`}
-                  ></i>
-                </div>
-              </button>
-            </div>
+                </button>
+              </div>
+              {teacherDivOpen && (
+                <>
+                  {teacherContacts.map((contact, index) => (
+                    <div
+                      key={contact._id}
+                      className={`contact ${
+                        index === currentSelected ? "selected" : ""
+                      }`}
+                      onClick={() => changeCurrentChat(index, contact)}
+                    >
+                      {contact.isAvatarImageSet && (
+                        <div className="avatar">
+                          <img
+                            src={`data:image/svg+xml;base64,${contact.avatarImage}`}
+                            alt="avatar"
+                          />
+                        </div>
+                      )}
+                      {contact.isProfileImageSet && (
+                        <div className="avatar">
+                          <img
+                            className="userProfile"
+                            src={`http://localhost:3001/files/${contact.profileImage}`}
+                            alt="avatar"
+                          />
+                        </div>
+                      )}
+                      <div className="username">
+                        <h3>{contact.username}</h3>
+                      </div>
+                    </div>
+                  ))}
+                </>
+              )}
+              <div className="contactsList">
+                <button
+                  className="studentsOpenButton"
+                  onClick={toggleStudentDiv}
+                >
+                  <div>Students</div>
+                  <div>
+                    <i
+                      className={`fa-solid fa-caret-${
+                        studentDivOpen ? "up" : "down"
+                      }`}
+                    ></i>
+                  </div>
+                </button>
+              </div>
 
-            {studentDivOpen && (
-              <>
-                {studentContacts.map((contact, index) => (
-                  <div
-                    key={contact._id}
-                    className={`contact ${
-                      index === currentSelected ? "selected" : ""
-                    }`}
-                    onClick={() => changeCurrentChat(index, contact)}
-                  >
-                    <div className="avatar">
-                      <img
-                        src={`data:image/svg+xml;base64,${contact.avatarImage}`}
-                        alt=""
-                      />
+              {studentDivOpen && (
+                <>
+                  {studentContacts.map((contact, index) => (
+                    <div
+                      key={contact._id}
+                      className={`contact ${
+                        index === currentSelected ? "selected" : ""
+                      }`}
+                      onClick={() => changeCurrentChat(index, contact)}
+                    >
+                      {contact.isAvatarImageSet && (
+                        <div className="avatar">
+                          <img
+                            src={`data:image/svg+xml;base64,${contact.avatarImage}`}
+                            alt="avatar"
+                          />
+                        </div>
+                      )}
+                      {contact.isProfileImageSet && (
+                        <div className="avatar">
+                          <img
+                            className="userProfile"
+                            src={`http://localhost:3001/files/${contact.profileImage}`}
+                            alt="avatar"
+                          />
+                        </div>
+                      )}
+                      <div className="username">
+                        <h3>{contact.username}</h3>
+                      </div>
                     </div>
-                    <div className="username">
-                      <h3>{contact.username}</h3>
-                    </div>
-                  </div>
-                ))}
-              </>
-            )}
-          </div>
-          <div className="current-user">
-            <div className="avatar">
-              <img
-                src={`data:image/svg+xml;base64,${currentUserImage}`}
-                alt="avatar"
-              />
+                  ))}
+                </>
+              )}
             </div>
-            <div className="username">
-              <h2>{currentUserName}</h2>
+            <div className="current-user">
+              {currentUserImage && (
+                <div className="avatar">
+                  <img
+                    src={`data:image/svg+xml;base64,${currentUserImage}`}
+                    alt="avatar"
+                  />
+                </div>
+              )}
+
+              {currentUserProfile && (
+                <div className="avatar">
+                  <img
+                    className="userProfile"
+                    src={`http://localhost:3001/files/${currentUserProfile}`}
+                    alt="avatar"
+                  />
+                </div>
+              )}
+
+              <div className="username">
+                <h2>{currentUserName}</h2>
+              </div>
             </div>
-          </div>
-        </Container>
-      )}
+          </Container>
+        )}
     </>
   );
 }
@@ -331,6 +375,10 @@ const Container = styled.div`
   grid-template-rows: 10% 75% 15%;
   overflow: hidden;
   background-color: #080420;
+
+  .userProfile {
+    border-radius: 50%;
+  }
 
   .contactsList {
     cursor: pointer;
@@ -461,6 +509,7 @@ const Container = styled.div`
       .avatar {
         img {
           height: 3rem;
+          width: 3rem;
         }
       }
       .username {
@@ -474,7 +523,9 @@ const Container = styled.div`
       }
     }
     .contact:hover {
-      transform: translateX(-5px); /* Adjust the value based on your preference */
+      transform: translateX(
+        -5px
+      ); /* Adjust the value based on your preference */
     }
     .selected {
       // background-color: #9a86f3;
@@ -496,6 +547,7 @@ const Container = styled.div`
     .avatar {
       img {
         height: 4rem;
+        width: 4rem;
         max-inline-size: 100%;
       }
     }

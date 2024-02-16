@@ -5,6 +5,8 @@ const studentSchema = new mongoose.Schema({
   password: String,
   isAvatarImageSet: Boolean,
   avatarImage: String,
+  profileImage: String,
+  isProfileImageSet: Boolean,
   role: { type: String, default: "student" },
   sessional1: {
     marksLecture: {

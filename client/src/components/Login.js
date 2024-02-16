@@ -7,7 +7,8 @@ import axios from "axios";
 import "../fonts/linearicons/style.css";
 import { useNavigate } from "react-router-dom";
 import { loginRoute } from "../utils/APIRoutes";
-import SetAvatar from "./SetAvatar";
+// import SetAvatar from "./SetAvatar";
+import Select from "./Select";
 // import { useHistory } from "react-router-dom";
 
 function Login() {
@@ -69,6 +70,8 @@ function Login() {
         const userId = result.data.userId;
         const avatarImage = result.data.avatarImage;
         const isAvatarImageSet = result.data.isAvatarImageSet;
+        const isProfileImageSet = result.data.isProfileImageSet;
+        const profileImage = result.data.profileImage;
         // Store the authentication token securely (e.g., in local storage)
         sessionStorage.setItem(
           "user",
@@ -78,6 +81,8 @@ function Login() {
             role: selectedRole,
             avatarImage: avatarImage,
             isAvatarImageSet: isAvatarImageSet,
+            isProfileImageSet: isProfileImageSet,
+            profileImage: profileImage,
           })
         );
 
@@ -88,8 +93,12 @@ function Login() {
         console.log(user);
         // Always navigate to "/setAvatar" after successful login
         // navigate("/setAvatar");;
-        if(isAvatarImageSet){
-          navigate("/chatbox")
+        if(isAvatarImageSet || isProfileImageSet){
+          if(user.role==='teacher'){
+            navigate("/teacherDashboard");
+          }else{
+            navigate("/studentDashboard");
+          }
         }else{
           setLoggedIn(true);
         }
@@ -121,7 +130,7 @@ function Login() {
   return (
     <div>
       {loggedIn ? (
-        <SetAvatar />
+        <Select />
       ) : (
         <>
           <div className="wrapper">

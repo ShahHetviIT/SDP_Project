@@ -72,7 +72,11 @@ export default function SetAvatar() {
           JSON.stringify(user)
         );
         console.log(user);
-        navigate("/chatbox");
+        if(user.role==='teacher'){
+          navigate("/teacherDashboard");
+        }else{
+          navigate("/studentDashboard");
+        }
       } else {
         toast.error("Error setting avatar. Please try again.", toastOptions);
       }

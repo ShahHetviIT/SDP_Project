@@ -1,31 +1,66 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
 
-const TeacherDashboard = () => {
+function TeacherDashboard() {
   const navigate = useNavigate();
+  const handleTutorBot = () => {
+    navigate('/chatbox');
+  }
 
-  const handleLogout = () => {
-    // Remove the authToken from localStorage
-    sessionStorage.clear();
-    navigate("/login");
+  const handleProfileImage = () => {
+    navigate('/select');
+  }
 
-    // Redirect to the login page
-    // navigate('/login');
-
-    // // Disable the back button
-    // window.history.pushState(null, null, window.location.href);
-    // window.onpopstate = function () {
-    //   window.history.go(1);
-    // };
-  };
+  const handleEdushareHub = () => {
+    navigate('/attendanceTeacher');
+  }
 
   return (
-    <div>
-      <h2>Welcome, Teacher!</h2>
-      {/* Add content specific to the teacher page */}
-      <button onClick={handleLogout}>Logout</button>
-    </div>
+    <Container>
+      <div className="allBtns">
+        <button onClick={handleTutorBot} className="btn">
+          <span>TutorBot</span>
+        </button>
+        <button onClick={handleEdushareHub} className="btn">
+          <span>EduShare Hub</span>
+        </button>
+        <button className="btn">
+          <span>Gradebook</span>
+        </button>
+        <button onClick={handleProfileImage} className="btn">
+          <span>Update Profile Image</span>
+        </button>
+      </div>
+    </Container>
   );
-};
+}
 
 export default TeacherDashboard;
+
+const Container = styled.div`
+  .allBtns {
+    display: flex;
+    gap: 30px;
+    height: 100vh;
+    align-items: center;
+    justify-content: center;
+  }
+  .btn {
+    margin-top: 0;
+    padding: 10px 20px;
+    border: none;
+    background: #99ccff;
+    color: #fff;
+    text-transform: uppercase;
+    font-family: "Muli-SemiBold";
+    font-size: 15px;
+    letter-spacing: 2px;
+    transition: all 0.5s;
+    position: relative;
+    overflow: hidden;
+  }
+  .btn:active {
+    background: #99ccff;
+  }
+`;

@@ -7,6 +7,8 @@ import TeacherDashboard from "./components/TeacherDashboard";
 import SetAvatar from "./components/SetAvatar";
 import Chatbox from "./components/Chatbox";
 import AttendanceTeacher from "./components/AttendanceTeacher";
+import Select from "./components/Select";
+import SetProfileImage from "./components/SetProfileImage";
 
 
 const App = () => {
@@ -32,6 +34,8 @@ const App = () => {
     <Router>
       <Routes>
         <Route index element={<Login/>}/>
+        <Route path="/select" element={<Select/>}/>
+        <Route path="/setProfileImage" element={<SetProfileImage/>}/>
         <Route path="/setAvatar" element={<SetAvatar />} />
         <Route path="/chatbox" element={<Chatbox />} />
         <Route path="/studentDashboard" element={<StudentDashboard />} />
