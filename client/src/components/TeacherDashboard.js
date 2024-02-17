@@ -12,7 +12,7 @@ function TeacherDashboard() {
     navigate('/select');
   }
 
-  const handleEdushareHub = () => {
+  const handleGradebook = () => {
     navigate('/attendanceTeacher');
   }
 
@@ -22,10 +22,10 @@ function TeacherDashboard() {
         <button onClick={handleTutorBot} className="btn">
           <span>TutorBot</span>
         </button>
-        <button onClick={handleEdushareHub} className="btn">
+        <button  className="btn">
           <span>EduShare Hub</span>
         </button>
-        <button className="btn">
+        <button onClick={handleGradebook} className="btn">
           <span>Gradebook</span>
         </button>
         <button onClick={handleProfileImage} className="btn">
