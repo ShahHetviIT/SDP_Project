@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
@@ -7,17 +7,27 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import { FaPlus } from 'react-icons/fa';
 import axios from 'axios';
-import {fetchData} from './Classcard';
-// import { useNavigate } from 'react-router-dom';
+import { fetchData } from './Classcard';
+import { useNavigate } from 'react-router-dom';
+
 
 export default function Createroom() {
   const [open, setOpen] = useState(false);
   const [classRoom, setClassRoom] = useState('');
   const [subject, setSubject] = useState('');
-  const [teacher,setTeacher] = useState('');
+  const [teacher, setTeacher] = useState('');
+  const [role, setRole] = useState(undefined);
 
-  // const navigate = useNavigate();
-  
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!sessionStorage.getItem("user")) {
+      navigate("/login");
+    } else {
+      const data = JSON.parse(sessionStorage.getItem("user"));
+      setRole(data.role);
+    }
+  }, [navigate]);
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -54,11 +64,11 @@ export default function Createroom() {
 
   return (
     <React.Fragment>
-      <FaPlus className="plus" onClick={handleClickOpen} />
+      {role === "teacher" && <FaPlus className="plus" onClick={handleClickOpen} />}
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Create Class</DialogTitle>
         <DialogContent>
-          <form onSubmit={(e) => {
+          <form style={{ boxShadow: 'none', padding: 0 }} onSubmit={(e) => {
             e.preventDefault();
             handleSubmit();
           }}>

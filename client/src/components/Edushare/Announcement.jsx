@@ -158,26 +158,30 @@ const Announcement = ({ updateMaterials }) => {
 
   return (
     <div>
-      {loading && material.length === 0 && (
-        <div className="no-announcements">No announcements</div>
-      )}
       {material.map((item, index) => (
-        <div key={index} className='amt'>
-          {item.pdf.map((pdfName, pdfIndex) => (
-            <div key={pdfIndex} className="amt__Cnt">
-              <div className='date'>{new Date(item.createdAt).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</div>
-              <div className="amt__top">
-                <div>
-                  <div>{item.pdfName[pdfIndex]}</div>
-                  <div>{item.description[pdfIndex]}</div>
-                </div>
-                <button onClick={() => showPdf(pdfName, item.description)}>View PDF</button>
-              </div>
-              <Divider />
+  <div key={index} className='amt'>
+    {item.pdf.length === 0 ? (
+      <div>No materials available</div>
+    ) : (
+      item.pdf.map((pdfName, pdfIndex) => (
+        <div key={pdfIndex} className="amt__Cnt">
+          <div className='date'>{new Date(item.createdAt).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</div>
+          <div className="amt__top">
+            <div>
+              <div>{item.pdfName[pdfIndex]}</div>
+              <div>{item.description[pdfIndex]}</div>
             </div>
-          ))}
+            <button onClick={() => showPdf(pdfName, item.description)}><span>View PDF</span></button>
+          </div>
+          <Divider />
         </div>
-      ))}
+      ))
+    )}
+  </div>
+))}
+
+  
+
     </div>
   );
 };

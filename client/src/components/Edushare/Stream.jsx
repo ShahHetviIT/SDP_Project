@@ -127,6 +127,37 @@ function Stream() {
   const location = useLocation();
   const [openDialog, setOpenDialog] = useState(false);
   const [isNavbarOpen, setIsNavbarOpen] = useState(false);
+  const [role, setRole] = useState(undefined);
+  const [currentUserImage, setCurrentUserImage] = useState(undefined);
+  const [currentUserName, setCurrentUserName] = useState(undefined);
+  const [currentImageType, setCurrentImageType] = useState(undefined);
+
+  useEffect(() => {
+      const fetchData = async () => {
+        try {
+          const data = await JSON.parse(sessionStorage.getItem("user"));
+          setRole(data.role);
+          console.log(data);
+          if (data.isAvatarImageSet) {
+            console.log("avatar");
+            setCurrentUserName(data.username);
+            setCurrentUserImage(data.avatarImage);
+            setCurrentImageType("avatar");
+          } else {
+            console.log("profile");
+            setCurrentUserName(data.username);
+            setCurrentUserImage(data.profileImage);
+            setCurrentImageType("profile");
+          }
+          
+        } catch (error) {
+          console.error("Error fetching user data:", error);
+        }
+      };
+  
+      fetchData();
+    
+  }, []);
 
   const toggleNavbar = () => {
     setIsNavbarOpen(!isNavbarOpen);
@@ -173,6 +204,29 @@ function Stream() {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }} margin='15px' fontSize='2em'>
             {selectedClassroom}
           </Typography>
+          <div className="current-user">
+            {currentImageType === "avatar" && (
+              <div className="avatar">
+                <img
+                  className="avatarImage"
+                  src={`data:image/svg+xml;base64,${currentUserImage}`}
+                  alt="avatar"
+                />
+              </div>
+            )}
+            {currentImageType === "profile" && (
+              <div className="avatar">
+                <img
+                  className="avatarImage"
+                  src={`http://localhost:3001/files/${currentUserImage}`}
+                  alt="avatar"
+                />
+              </div>
+            )}
+            <div className="username">
+              <h2>Welcome {currentUserName} !</h2>
+            </div>
+          </div>
         </Toolbar>
       </AppBar>
       <div className='main'>
@@ -182,7 +236,8 @@ function Stream() {
           <div className="main_announcements">
             <div className="main_announcementsWrapper">
               <div className="main_ancContent">
-                <Button onClick={() => setOpenDialog(true)}>Announce Something to Class</Button>
+                {role === "teacher" && <button className='announmentButton' onClick={() => setOpenDialog(true)}><span>Announce Something to Class</span></button>}
+                {role === "student" && <h1>Write something</h1>}
                 <Dialog open={openDialog} onClose={() => setOpenDialog(false)} fullWidth>
                   <DialogContent>
                     <TextField

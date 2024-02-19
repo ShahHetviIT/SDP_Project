@@ -10,6 +10,12 @@
   
 }
 
+.announmentButton{
+  margin: 0;
+  background: #99ccff;
+    color: white;
+}
+
 .main_wrapper {
   margin: 0 auto;
   display: flex;

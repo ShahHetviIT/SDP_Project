@@ -16,13 +16,17 @@ function StudentDashboard() {
     navigate('/attendanceStudent');
   }
 
+  const handleEdushare = () => {
+    navigate("/edushare");
+  }
+
   return (
     <Container>
       <div className="allBtns">
         <button onClick={handleTutorBot} className="btn">
           <span>TutorBot</span>
         </button>
-        <button className="btn">
+        <button onClick={handleEdushare} className="btn">
           <span>EduShare Hub</span>
         </button>
         <button onClick={handleGradebook} className="btn">
