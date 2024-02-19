@@ -1,0 +1,21 @@
+.work{
+display: flex;
+justify-content: space-between;
+align-items: center;
+margin-left: auto;
+font-size: 25px;
+color: #9186f3;
+padding-right: 20px;
+}
+
+.drive{
+    color: #9186f3;
+    font-size: 25px;
+}
+.action{
+    background-color: #131324;
+}
+.card{
+    margin: 25px;
+    cursor: pointer;
+}

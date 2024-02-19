@@ -1,0 +1,35 @@
+.header1{
+    padding: 30px;
+    background-color: #011627;
+    height: 30px;
+    display: flex;
+    color: white;
+  }
+.header{
+    font-size: 25px;
+    cursor: pointer;
+  }
+.heading{
+  display: flex;
+  margin: -9px 25px 17px 25px;
+  font-size: 35px;
+}
+.plus{
+  font-size: 25px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-left: auto;
+}
+.profile{
+  font-size: 25px;
+    margin-top: 0px;
+    margin-right: 20px;
+    margin-bottom: 15px;
+    margin-left: 20px;
+}
+.form-container {
+  display: flex;
+  align-items: center;
+}
+
