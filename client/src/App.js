@@ -2,13 +2,16 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 // import Contacts from "./components/Contacts";
 import Login from "./components/Login";
-import StudentDashboard from "./components/StudentDashboard";
-import TeacherDashboard from "./components/TeacherDashboard";
-import SetAvatar from "./components/SetAvatar";
-import Chatbox from "./components/Chatbox";
-import AttendanceTeacher from "./components/AttendanceTeacher";
-import Select from "./components/Select";
-import SetProfileImage from "./components/SetProfileImage";
+import StudentDashboard from "./components/Dashboard/StudentDashboard";
+import TeacherDashboard from "./components/Dashboard/TeacherDashboard";
+import SetAvatar from "./components/SetAvatar/SetAvatar";
+import Chatbox from "./components/Tutorbot/Chatbox";
+import AttendanceTeacher from "./components/Gradebook/Teacher/AttendanceTeacher";
+import Select from "./components/SetAvatar/Select";
+import SetProfileImage from "./components/SetAvatar/SetProfileImage";
+import AttendanceStudent from "./components/Gradebook/Student/AttendanceStudent";
+import Stream from "./components/Edushare/Stream";
+import Home from "./components/Edushare/Home";
 
 
 const App = () => {
@@ -42,6 +45,9 @@ const App = () => {
         <Route path="/teacherDashboard" element={<TeacherDashboard />} />
         <Route path="/login" element={<Login />} />
         <Route path="/attendanceTeacher" element={<AttendanceTeacher/>}/>
+        <Route path="/attendanceStudent" element={<AttendanceStudent/>}/>
+        <Route path="/stream/:id" element={<Stream />} />
+        <Route path="/edushare" element={<Home />} />
       </Routes>
     </Router>
   );

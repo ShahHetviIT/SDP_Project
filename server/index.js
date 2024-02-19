@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const loginRoute = require("./routes/loginRoute");
 const messageRoute = require("./routes/messagesRoute");
+const classroomRoute = require("./routes/classroomRoute");
 // const files = require("./routes/files");
 const socket = require("socket.io");
 const app = express();
@@ -55,6 +56,7 @@ app.use("/files",express.static("files"));
 
 app.use("/api/auth", loginRoute);
 app.use("/api/messages", messageRoute);
+app.use("/api/classroom", classroomRoute);
 // app.use("",files);
 
 // const multer  = require('multer');

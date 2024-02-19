@@ -8,7 +8,7 @@ import "../fonts/linearicons/style.css";
 import { useNavigate } from "react-router-dom";
 import { loginRoute } from "../utils/APIRoutes";
 // import SetAvatar from "./SetAvatar";
-import Select from "./Select";
+import Select from "./SetAvatar/Select";
 // import { useHistory } from "react-router-dom";
 
 function Login() {
