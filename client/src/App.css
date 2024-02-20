@@ -12,6 +12,27 @@
   box-sizing: border-box;
 }
 
+/* width */
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #99ccff; 
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #2a52be; 
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: darkblue; 
+}
+
+
 body {
   font-family: "Muli-Regular";
   font-size: 14px;

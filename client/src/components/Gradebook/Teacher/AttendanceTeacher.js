@@ -24,14 +24,22 @@ export default function AttendanceTeacher() {
   const [teacherLab, setTeacherLab] = useState([]);
   const [currentUserName, setCurrentUserName] = useState(undefined);
   const [currentUserImage, setCurrentUserImage] = useState(undefined);
+  const [currentImageType, setCurrentImageType] = useState(undefined);
   // console.log(sidebarOpen);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const data = await JSON.parse(sessionStorage.getItem("user"));
-        setCurrentUserName(data.username);
-        setCurrentUserImage(data.avatarImage);
+        if (data.isAvatarImageSet) {
+          setCurrentUserName(data.username);
+          setCurrentUserImage(data.avatarImage);
+          setCurrentImageType("avatar");
+        } else {
+          setCurrentUserName(data.username);
+          setCurrentUserImage(data.profileImage);
+          setCurrentImageType("profile");
+        }
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
@@ -127,13 +135,24 @@ export default function AttendanceTeacher() {
 
           <a className="navbar-brand">Navbar</a>
           <div className="current-user">
-            <div className="avatar">
-              <img
-                className="avatarImage"
-                src={`data:image/svg+xml;base64,${currentUserImage}`}
-                alt="avatar"
-              />
-            </div>
+            {currentImageType === "avatar" && (
+              <div className="avatar">
+                <img
+                  className="avatarImage"
+                  src={`data:image/svg+xml;base64,${currentUserImage}`}
+                  alt="avatar"
+                />
+              </div>
+            )}
+            {currentImageType === "profile" && (
+              <div className="avatar">
+                <img
+                  className="avatarImage"
+                  src={`http://localhost:3001/files/${currentUserImage}`}
+                  alt="avatar"
+                />
+              </div>
+            )}
             <div className="username">
               <h2>Welcome {currentUserName} !</h2>
             </div>

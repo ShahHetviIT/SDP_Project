@@ -8,5 +8,7 @@ export const setAvatarRoute = `${host}/api/auth/setavatar`;
 export const setProfileImageRoute = `${host}/api/auth/setProfileImage`;
 export const allUsersRouteTeachers = `${host}/api/auth/allusersteacher`;
 export const allUsersRouteStudents = `${host}/api/auth/alluserstudent`;
+export const getCurrentStudentRoute = `${host}/api/auth/getCurrentStudent`;
 export const sendMessageRoute = `${host}/api/messages/addmsg`;
 export const recieveMessageRoute = `${host}/api/messages/getmsg`;
+

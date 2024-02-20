@@ -3,6 +3,8 @@ import Sessional1 from "./Sessional1";
 import Sessional2 from "./Sessional2";
 import Sessional3 from "./Sessional3";
 import "../../../style/Attendance.css";
+import {getCurrentStudentRoute} from "../../../utils/APIRoutes";
+import axios from "axios";
 
 export default function AttendanceStudent() {
   const [sessioanl1, setSessional1] = useState(false);
@@ -11,12 +13,13 @@ export default function AttendanceStudent() {
   const [currentUserName, setCurrentUserName] = useState(undefined);
   const [currentUserImage, setCurrentUserImage] = useState(undefined);
   const [currentImageType, setCurrentImageType] = useState(undefined);
+  const [currentStudent, setCurrentStudent] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const data = await JSON.parse(sessionStorage.getItem("user"));
-        if (data.setAvatarImage) {
+        if (data.isAvatarImageSet) {
           setCurrentUserName(data.username);
           setCurrentUserImage(data.avatarImage);
           setCurrentImageType("avatar");
@@ -30,8 +33,20 @@ export default function AttendanceStudent() {
       }
     };
 
+    const fetchCurrentStudent = async () => {
+        try{
+          const data = await JSON.parse(sessionStorage.getItem("user"));
+          const getCurrentStudent = await axios.get(`${getCurrentStudentRoute}/${data.userId}`);
+          setCurrentStudent(getCurrentStudent.data);
+        } catch (error) {
+          console.error("Error fetching user data:", error);
+        }
+    };
+    
     fetchData();
+    fetchCurrentStudent();
   }, []);
+
 
   const handleSessiaonal1 = () => {
     setSessional1(true);
@@ -95,11 +110,11 @@ export default function AttendanceStudent() {
       </div>
 
       <div className="sessional">
-        {sessioanl1 && <Sessional1 />}
+        {sessioanl1 && <Sessional1 currentStudent={currentStudent} />}
 
-        {sessioanl2 && <Sessional2 />}
+        {sessioanl2 && <Sessional2 currentStudent={currentStudent} />}
 
-        {sessioanl3 && <Sessional3 />}
+        {sessioanl3 && <Sessional3 currentStudent={currentStudent} />}
       </div>
     </div>
   );

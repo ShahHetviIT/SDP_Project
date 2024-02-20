@@ -7,6 +7,33 @@
   src: url("../fonts/muli/Muli-SemiBold.ttf");
 }
 
+.card1 {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 20px 0;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  color: black;
+}
+
+.tableRow td:first-child {
+  font-weight: bold;
+  width: 30%;
+  text-align: end;
+}
+
+.tableRow td:nth-child(2) {
+  text-align: start;
+}
+
+
+/* In a CSS file or a style block in your component */
+.tableRow:nth-child(odd) {
+ background-color: #99ccff;
+}
+
+
 .container-body {
   min-height: 100vh;
   margin: 0;
@@ -39,6 +66,10 @@
 table {
   border-collapse: collapse;
   width: 100%;
+}
+
+.wid{
+  width: 14.286%;
 }
 
 th,
@@ -161,6 +192,33 @@ th {
   }
 }
 
+.image{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: white;
+  font-family: Muli-SemiBold;
+  font-size: 1.1em;
+}
+
 .sessional{
   padding: 0 20px;
+  h3{
+    color: black;
+    padding: 20px 10px 20px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    font-family: 'Muli-Regular';
+    text-align: start;
+    margin: 0;
+    font-size: 1.7em;
+    
+  }
 }
+
+.line{
+  margin: 30px 0 10px;
+  border: 1.5px dashed #99ccff;
+}
+

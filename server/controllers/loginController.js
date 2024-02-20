@@ -351,3 +351,23 @@ module.exports.getTeacherSubjects = async (req, res, next) => {
     next(err);
   }
 };
+
+module.exports.getCurrentStudentDetails = async (req, res, next) => {
+  try {
+    console.log("heloooooo");
+    const userId = req.params.id;
+    console.log("User ID:", userId);
+
+    const studentData = await StudentModel.findById(userId);
+    if (!studentData) {
+      return res.status(404).json({ error: "Teacher not found" });
+    }
+
+    // console.log(teacherData);
+
+    return res.json(studentData);
+  } catch (err) {
+    console.error("Error:", err);
+    next(err);
+  }
+};

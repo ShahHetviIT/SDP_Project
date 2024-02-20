@@ -12,7 +12,7 @@ export default function Logout() {
   };
   return (
     <Button onClick={handleClick}>
-      <BiPowerOff />
+      <span><BiPowerOff /></span>
     </Button>
   );
 }

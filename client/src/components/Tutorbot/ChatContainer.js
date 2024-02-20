@@ -5,17 +5,20 @@ import ChatInput from "./ChatInput";
 import axios from "axios";
 import { sendMessageRoute, recieveMessageRoute } from "../../utils/APIRoutes";
 import { v4 as uuidv4 } from "uuid";
+import { Link } from "react-router-dom";
 
 export default function ChatContainer({ currentChat, currentUser, socket }) {
   const [messages, setMessages] = useState([]);
   const scrollRef = useRef();
   const [arrivalMessage, setArrivalMessage] = useState(null);
   const [allImage, setAllImage] = useState(null);
+  const [role,setRole] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const data = await JSON.parse(sessionStorage.getItem("user"));
+        setRole(data.role);
         const response = await axios.post(recieveMessageRoute, {
           from: data.userId,
           to: currentChat._id,
@@ -172,18 +175,29 @@ export default function ChatContainer({ currentChat, currentUser, socket }) {
               )}
               {currentChat.isProfileImageSet && (
                 <div className="avatar">
-                <img
-                  className="userProfile"
-                  src={`http://localhost:3001/files/${currentChat.profileImage}`}
-                  alt="avatar"
-                />
-              </div>
+                  <img
+                    className="userProfile"
+                    src={`http://localhost:3001/files/${currentChat.profileImage}`}
+                    alt="avatar"
+                  />
+                </div>
               )}
               <div className="username">
                 <h3>{currentChat.username}</h3>
               </div>
             </div>
-            <Logout />
+            <div className="dashboard-link">
+              <div>
+              {role === "teacher" &&(
+                <Link to="/teacherDashboard">Dashboard</Link>
+              )}
+              {role === "student" &&(
+                <Link to="/studentDashboard">Dashboard</Link>
+              
+              )}
+              </div>
+              <Logout />
+            </div>
           </div>
           <div className="chat-messages">
             {messages.map((message) => {
@@ -251,6 +265,20 @@ const Container = styled.div`
   grid-template-rows: 10% 80% 10%;
   gap: 0.1rem;
   overflow: hidden;
+
+  .dashboard-link {
+    Display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    a{
+      font-size: large;
+      color:white;
+    }
+    a:hover{
+      color: #99ccff;
+    }
+  }
   .specialMsg {
     display: flex;
     align-items: center;
@@ -274,7 +302,7 @@ const Container = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 2rem;
+    padding: 15px 2rem 0;
     .user-details {
       display: flex;
       align-items: center;

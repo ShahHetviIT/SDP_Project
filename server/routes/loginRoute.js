@@ -8,6 +8,7 @@ const {
   getTeacherSubjects,
   getStudentMarksAttendance,
   getTotalStudentMarksAttendance,
+  getCurrentStudentDetails,
 } = require("../controllers/loginController");
 const upload = require("../middleware/multer");
 const studentModel = require("../models/studentModel");
@@ -24,6 +25,7 @@ router.get("/alluserstudent", getAllStudents);
 router.get("/getTeacherSubjectName/:id", getTeacherSubjects);
 router.post("/getMarksAttendance", getStudentMarksAttendance);
 router.post("/getTotalMarksAttendance", getTotalStudentMarksAttendance);
+router.get("/getCurrentStudent/:id",getCurrentStudentDetails);
 
 router.post("/setProfileImage", upload.single("file"), async (req, res) => {
   try {
