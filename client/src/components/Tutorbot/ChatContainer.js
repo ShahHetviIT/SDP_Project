@@ -12,7 +12,7 @@ export default function ChatContainer({ currentChat, currentUser, socket }) {
   const scrollRef = useRef();
   const [arrivalMessage, setArrivalMessage] = useState(null);
   const [allImage, setAllImage] = useState(null);
-  const [role,setRole] = useState(null);
+  const [role, setRole] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -188,65 +188,65 @@ export default function ChatContainer({ currentChat, currentUser, socket }) {
             </div>
             <div className="dashboard-link">
               <div>
-              {role === "teacher" &&(
-                <Link to="/teacherDashboard">Dashboard</Link>
-              )}
-              {role === "student" &&(
-                <Link to="/studentDashboard">Dashboard</Link>
-              
-              )}
+                {role === "teacher" && (
+                  <Link to="/teacherDashboard">Dashboard</Link>
+                )}
+                {role === "student" && (
+                  <Link to="/studentDashboard">Dashboard</Link>
+                )}
               </div>
               <Logout />
             </div>
           </div>
           <div className="chat-messages">
-            {messages.map((message) => {
-              const isFileAttachment = /\.(pdf|jpg|png|docx|txt|zip)$/i.test(
-                message.message
-              );
+            {messages.length > 0 ? (
+              messages.map((message) => {
+                const isFileAttachment = /\.(pdf|jpg|png|docx|txt|zip)$/i.test(
+                  message.message
+                );
 
-              let imageData = null;
-              let imagename = null;
-              // Find the matching data in allImage
-              {
-                allImage.map((image) => {
+                let imageData = null;
+                let imagename = null;
+                // Find the matching data in allImage
+                allImage.forEach((image) => {
                   if (message.message === image.message.text) {
-                    // console.log(image.pdf);
                     imageData = image.pdf;
                     imagename = image.message.text;
                   }
                 });
-              }
 
-              console.log(imageData + "----" + imagename);
+                console.log(imageData + "----" + imagename);
 
-              return (
-                <div ref={scrollRef} key={uuidv4()}>
-                  <div
-                    className={`message ${
-                      message.fromSelf ? "sended" : "recieved"
-                    } ${isFileAttachment ? "file-attachment" : ""}`}
-                  >
-                    <div className="content">
-                      {isFileAttachment ? (
-                        <div className="specialMsg">
+                return (
+                  <div ref={scrollRef} key={uuidv4()}>
+                    <div
+                      className={`message ${
+                        message.fromSelf ? "sended" : "recieved"
+                      } ${isFileAttachment ? "file-attachment" : ""}`}
+                    >
+                      <div className="content">
+                        {isFileAttachment ? (
+                          <div className="specialMsg">
+                            <p>{message.message}</p>
+                            <button
+                              className="showBtn"
+                              onClick={() => showPdf(imageData)}
+                            >
+                              <i className="fa-regular fa-file"></i>
+                            </button>
+                            {/* Additional content related to imageData can be displayed here */}
+                          </div>
+                        ) : (
                           <p>{message.message}</p>
-                          <button
-                            className="showBtn"
-                            onClick={() => showPdf(imageData)}
-                          >
-                            <i className="fa-regular fa-file"></i>
-                          </button>
-                          {/* Additional content related to imageData can be displayed here */}
-                        </div>
-                      ) : (
-                        <p>{message.message}</p>
-                      )}
+                        )}
+                      </div>
                     </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })
+            ) : (
+              <div></div>
+            )}
           </div>
 
           <ChatInput
@@ -267,15 +267,15 @@ const Container = styled.div`
   overflow: hidden;
 
   .dashboard-link {
-    Display: flex;
+    display: flex;
     align-items: center;
     justify-content: center;
     gap: 20px;
-    a{
+    a {
       font-size: large;
-      color:white;
+      color: white;
     }
-    a:hover{
+    a:hover {
       color: #99ccff;
     }
   }
@@ -302,15 +302,15 @@ const Container = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 15px 2rem 0;
+    padding: 8px 2rem;
     .user-details {
       display: flex;
       align-items: center;
       gap: 1rem;
       .avatar {
         img {
-          height: 3rem;
-          width: 3rem;
+          height: 2.8rem;
+          width: 2.8rem;
           border-radius: 50%;
         }
       }

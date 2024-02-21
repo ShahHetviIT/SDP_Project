@@ -182,7 +182,7 @@
 
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import Logo from "../../assets/icon1.png";
+import TutorBot from "../../assets/totorbot.png";
 
 export default function Contacts({
   teacherContacts,
@@ -236,7 +236,7 @@ export default function Contacts({
         currentUserProfile) && (
           <Container>
             <div className="brand">
-              <img src={Logo} alt="logo" />
+              <img src={TutorBot} alt="logo" />
               <h3>Mentor Mingle</h3>
             </div>
             <div className="contacts">
@@ -466,10 +466,10 @@ const Container = styled.div`
   .brand {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 0.3rem;
     justify-content: center;
     img {
-      height: 2rem;
+      height: 2.8rem;
     }
     h3 {
       color: white;

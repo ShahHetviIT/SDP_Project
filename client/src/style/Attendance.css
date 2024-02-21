@@ -120,9 +120,11 @@ th {
 
 .sessionalButtons {
   padding: 20px 0;
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    flex-flow: wrap;
+    gap: 15px;
 
   .btn {
     background-color: #99ccff;
@@ -175,7 +177,7 @@ th {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 20px;
+  gap: 10px;
 }
 
 .avatarImage{
@@ -188,7 +190,7 @@ th {
   h2{
     color: white;
     font-family: 'Muli-SemiBold';
-    font-size: 1.7em;
+    font-size: 1.5em;
   }
 }
 
@@ -199,7 +201,7 @@ th {
   gap: 10px;
   color: white;
   font-family: Muli-SemiBold;
-  font-size: 1.1em;
+  font-size: 1.8em;
 }
 
 .sessional{
@@ -212,7 +214,7 @@ th {
     font-family: 'Muli-Regular';
     text-align: start;
     margin: 0;
-    font-size: 1.7em;
+    font-size: 1.3em;
     
   }
 }
@@ -220,5 +222,22 @@ th {
 .line{
   margin: 30px 0 10px;
   border: 1.5px dashed #99ccff;
+}
+
+.gradebookTitle{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+
+  img{
+    height: 2.8rem;
+  }
+
+  div{
+    color: white;
+    font-size: 1.5em;
+    font-family: 'Muli-SemiBold';
+  }
 }
 

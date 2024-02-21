@@ -3,8 +3,10 @@ import Sessional1 from "./Sessional1";
 import Sessional2 from "./Sessional2";
 import Sessional3 from "./Sessional3";
 import "../../../style/Attendance.css";
-import {getCurrentStudentRoute} from "../../../utils/APIRoutes";
+import { getCurrentStudentRoute } from "../../../utils/APIRoutes";
 import axios from "axios";
+import Gradebook from "../../../assets/gradebook.png";
+import Logout from "../../Logout";
 
 export default function AttendanceStudent() {
   const [sessioanl1, setSessional1] = useState(false);
@@ -34,19 +36,20 @@ export default function AttendanceStudent() {
     };
 
     const fetchCurrentStudent = async () => {
-        try{
-          const data = await JSON.parse(sessionStorage.getItem("user"));
-          const getCurrentStudent = await axios.get(`${getCurrentStudentRoute}/${data.userId}`);
-          setCurrentStudent(getCurrentStudent.data);
-        } catch (error) {
-          console.error("Error fetching user data:", error);
-        }
+      try {
+        const data = await JSON.parse(sessionStorage.getItem("user"));
+        const getCurrentStudent = await axios.get(
+          `${getCurrentStudentRoute}/${data.userId}`
+        );
+        setCurrentStudent(getCurrentStudent.data);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
     };
-    
+
     fetchData();
     fetchCurrentStudent();
   }, []);
-
 
   const handleSessiaonal1 = () => {
     setSessional1(true);
@@ -70,7 +73,10 @@ export default function AttendanceStudent() {
     <div className="container-body">
       <nav className="navbar navbar-expand-lg navbar-light bg-primary">
         <div className="container-fluid">
-          <a className="navbar-brand">Navbar</a>
+          <div className="gradebookTitle">
+            <img src={Gradebook} alt="" />
+            <div>Gradebook</div>
+          </div>
           <div className="current-user">
             {currentImageType === "avatar" && (
               <div className="avatar">
@@ -93,11 +99,15 @@ export default function AttendanceStudent() {
             <div className="username">
               <h2>Welcome {currentUserName} !</h2>
             </div>
+            <Logout />
           </div>
         </div>
       </nav>
 
       <div className="sessionalButtons">
+      <button className="btn">
+          <span> Dashboard</span>
+        </button>
         <button onClick={handleSessiaonal1} className="btn">
           <span>Sessional 1</span>
         </button>
@@ -106,6 +116,9 @@ export default function AttendanceStudent() {
         </button>
         <button onClick={handleSessiaonal3} className="btn">
           <span>Sessional 3</span>
+        </button>
+        <button className="btn">
+          <span>External</span>
         </button>
       </div>
 
