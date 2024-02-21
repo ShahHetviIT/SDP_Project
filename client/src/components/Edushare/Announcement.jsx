@@ -161,7 +161,7 @@ const Announcement = ({ updateMaterials }) => {
       {material.map((item, index) => (
   <div key={index} className='amt'>
     {item.pdf.length === 0 ? (
-      <div>No materials available</div>
+      <div className='no-announcements'>No materials available</div>
     ) : (
       item.pdf.map((pdfName, pdfIndex) => (
         <div key={pdfIndex} className="amt__Cnt">

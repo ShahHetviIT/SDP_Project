@@ -32,16 +32,12 @@
 }
 
 .no-announcements {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  display: flex;
-  justify-content: center;
   align-items: center;
-  background-color: rgba(255, 255, 255, 0.8);
-  z-index: 1;
+  font-size: 17px;
+  display: flex;
+  color: #1967d2;
+  height: 150px;
+  justify-content: center;
 }
 
 .date{

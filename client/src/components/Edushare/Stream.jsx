@@ -113,7 +113,7 @@
 
 import React, { useState, useEffect } from 'react';
 import '../../style/Stream.css';
-import { AppBar, Button, Dialog, DialogActions, DialogContent,TextField, Toolbar, Typography } from '@mui/material';
+import { AppBar, Button, Dialog, DialogActions, DialogContent, TextField, Toolbar, Typography } from '@mui/material';
 import Announcement from './Announcement';
 import { useLocation } from 'react-router-dom';
 import axios from 'axios';
@@ -133,30 +133,30 @@ function Stream() {
   const [currentImageType, setCurrentImageType] = useState(undefined);
 
   useEffect(() => {
-      const fetchData = async () => {
-        try {
-          const data = await JSON.parse(sessionStorage.getItem("user"));
-          setRole(data.role);
-          console.log(data);
-          if (data.isAvatarImageSet) {
-            console.log("avatar");
-            setCurrentUserName(data.username);
-            setCurrentUserImage(data.avatarImage);
-            setCurrentImageType("avatar");
-          } else {
-            console.log("profile");
-            setCurrentUserName(data.username);
-            setCurrentUserImage(data.profileImage);
-            setCurrentImageType("profile");
-          }
-          
-        } catch (error) {
-          console.error("Error fetching user data:", error);
+    const fetchData = async () => {
+      try {
+        const data = await JSON.parse(sessionStorage.getItem("user"));
+        setRole(data.role);
+        console.log(data);
+        if (data.isAvatarImageSet) {
+          console.log("avatar");
+          setCurrentUserName(data.username);
+          setCurrentUserImage(data.avatarImage);
+          setCurrentImageType("avatar");
+        } else {
+          console.log("profile");
+          setCurrentUserName(data.username);
+          setCurrentUserImage(data.profileImage);
+          setCurrentImageType("profile");
         }
-      };
-  
-      fetchData();
-    
+
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+
+    fetchData();
+
   }, []);
 
   const toggleNavbar = () => {
@@ -196,10 +196,10 @@ function Stream() {
       console.error('Error uploading file:', error);
     }
   };
-  
+
   return (
     <div className='main1'>
-      <AppBar position="static">
+      <AppBar position="static" style={{position:'fixed', width:'100%', zIndex:'1'}}>
         <Toolbar className='header2'>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }} margin='15px' fontSize='2em'>
             {selectedClassroom}
@@ -236,8 +236,19 @@ function Stream() {
           <div className="main_announcements">
             <div className="main_announcementsWrapper">
               <div className="main_ancContent">
-                {role === "teacher" && <button className='announmentButton' onClick={() => setOpenDialog(true)}><span>Announce Something to Class</span></button>}
-                {role === "student" && <h1>Write something</h1>}
+                {role === "teacher" && <div className='announmentButton' style={{
+                  position: 'relative',
+                  overflow: 'hidden',
+                  border: 'none',
+                  backgroundColor: 'transparent',
+                  color: '#333',
+                  fontSize: '16px',
+                  padding: '10px 20px',
+                  cursor: 'pointer',
+                  transition: 'color 0.3s, background-color 0.3s',
+                  
+                }} onClick={() => setOpenDialog(true)}><span style={{color: '#1967d2', fontSize:'20px'}}>Announce Something to Class</span></div>}
+                {role === "student" && <h1 style={{color:'#1967d2'}}>Relish Learning</h1>}
                 <Dialog open={openDialog} onClose={() => setOpenDialog(false)} fullWidth>
                   <DialogContent>
                     <TextField
@@ -252,12 +263,13 @@ function Stream() {
                       variant='outlined'
                       color='primary'
                       type='file'
+                      margin='10px'
                       onChange={(e) => setFile(e.target.files[0])}
                     />
                   </DialogContent>
                   <DialogActions>
-                    <Button onClick={() => setOpenDialog(false)}>Cancel</Button>
-                    <Button color='primary' variant='contained' onClick={handleSubmit}>Post</Button>
+                    <Button onClick={() => setOpenDialog(false)} style={{width: '100px'}}>Cancel</Button>
+                    <Button color='primary' variant='contained' onClick={handleSubmit} style={{width: '100px'}}>Post</Button>
                   </DialogActions>
                 </Dialog>
               </div>

@@ -33,7 +33,8 @@ const Navbar = ({ show,toggleNavbar }) => {
 
   return (
     <div className={show ? 'sidenav active' : 'sidenav'}>
-        <RxCross1 onClick={toggleNavbar} className='closebtn'/>
+      <div style={{marginTop: '44px'}}>
+        <RxCross1 onClick={toggleNavbar} className='closebtn' style={{marginTop: '20px'}}/>
       <ul>
         <li>
           <Link to='/'>
@@ -82,6 +83,7 @@ const Navbar = ({ show,toggleNavbar }) => {
       </ul>
 
 
+    </div>
     </div>
   )
 }

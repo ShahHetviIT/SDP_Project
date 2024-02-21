@@ -8,14 +8,21 @@
   justify-content: space-between;
   align-items: center;
   gap: 15px;
+  position: fixed;
+  width: 100%;
+  z-index: 1;
 
+}
+
+.header-container{
+  height: 90px;
 }
 
 .avatar{
   margin: 0;
 }
 
-.title{
+.title1{
   display: flex;
   align-items: center;
   justify-content: center;

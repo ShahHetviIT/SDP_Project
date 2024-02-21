@@ -7,15 +7,18 @@
   background-color: #011627;
   height: 13vh;
   color: #fff;
-  
 }
 
 .announmentButton{
   margin: 0;
-  background: #99ccff;
-    color: white;
-}
+  color: #1967d2;
 
+}
+.announmentButton:hover {
+  /* Reset hover effect */
+  color: inherit;
+  background-color: transparent;
+}
 .main_wrapper {
   margin: 0 auto;
   display: flex;
@@ -129,7 +132,7 @@
   overflow: hidden;
   min-height: 4.5rem;
   margin-bottom: 1.5rem;
-  margin-top: 1.5rem;
+  margin-top: 8.5rem;
 }
 
 .main_ancContent {
@@ -153,7 +156,7 @@
 }
 
 #filled-multiline-flexible {
-  width: 43vw !important;
+  width: 33vw !important;
   height: 20vh !important;
 }
 

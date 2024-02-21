@@ -6,12 +6,14 @@ import '../../style/Home.css'
 //import To_do from './To_do';
 export default function Home() {
   return (
-    <div>
+    
+      <div>
      <Header />
-        <Navbar />
+     <Navbar />
+     
         <div className='classcard'>
           <Classcard />
         </div>
-    </div>
+     </div> 
   )
 }

@@ -166,7 +166,9 @@ export default function Classcard() {
         const randomImage = data[Math.floor(Math.random() * data.length)];
 
         return (
+
           <Card key={index} sx={{ width: 345 }} className='card' onClick={() => handleClick(classroom)}>
+
             <CardMedia
               className='media'
               sx={{ height: 140 }}
@@ -185,10 +187,15 @@ export default function Classcard() {
             </CardContent>
             <Divider />
             <CardActions className='action'>
-              <BsPersonWorkspace className='work' />
-              <SiProtondrive className='drive' />
+              <div className='work'>
+                <BsPersonWorkspace />
+                <a href="https://www.google.com/intl/en_in/drive/">
+                  <SiProtondrive className='drive'/>
+                </a>
+              </div>
             </CardActions>
           </Card>
+
         );
       })}
     </>

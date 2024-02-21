@@ -44,11 +44,11 @@ export default function Header() {
   return (
     <div className='header-container'>
       <div className='header1'>
-        <div className='title'>
+        <div className='title1'>
         <GiHamburgerMenu className='header' onClick={() => setIsNavbarOpen(!isNavbarOpen)} />
         <header className='heading'>EduShare</header>
         </div>
-         <div className='title'>
+         <div className='title1'>
          <Createroom/>
          <div className="current-user">
             {currentImageType === "avatar" && (

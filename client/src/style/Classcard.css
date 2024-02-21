@@ -1,21 +1,24 @@
-.work{
-display: flex;
-justify-content: space-between;
-align-items: center;
-margin-left: auto;
-font-size: 25px;
-color: #9186f3;
-padding-right: 20px;
+.work {
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    display: flex;
+    margin-left: 248px;
+    font-size: 25px;
+    color: #9186f3;
+    padding-right: 20px;
 }
 
-.drive{
+.drive {
     color: #9186f3;
     font-size: 25px;
 }
-.action{
+
+.action {
     background-color: #131324;
 }
-.card{
+
+.card {
     margin: 25px;
     cursor: pointer;
 }

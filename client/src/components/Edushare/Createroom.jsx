@@ -64,7 +64,7 @@ export default function Createroom() {
 
   return (
     <React.Fragment>
-      {role === "teacher" && <FaPlus className="plus" onClick={handleClickOpen} />}
+      {role === "teacher" && <FaPlus className="plus"  style={{ cursor: 'pointer' }} onClick={handleClickOpen} />}
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Create Class</DialogTitle>
         <DialogContent>
@@ -112,8 +112,8 @@ export default function Createroom() {
               required
             />
             <DialogActions>
-              <Button onClick={handleClose}>Cancel</Button>
-              <Button type="submit">Create</Button>
+              <Button onClick={handleClose} >Cancel</Button>
+              <Button type="submit" style={{backgroundColor: '#007bff', color: 'white'}}><span>Create</span></Button>
             </DialogActions>
           </form>
         </DialogContent>
