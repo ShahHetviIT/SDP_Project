@@ -15,23 +15,6 @@ import Home from "./components/Edushare/Home";
 
 
 const App = () => {
-  // const [isAuthenticated, setIsAuthenticated] = useState(false);
-  // const [loading, setLoading] = useState(true);
-
-  // useEffect(() => {
-  //   const checkAuthentication = () => {
-  //     const authToken = sessionStorage.getItem("user");
-  //     setIsAuthenticated(!!authToken);
-  //     setLoading(false);
-  //   };
-
-  //   checkAuthentication();
-  // }, []);
-
-  // if (loading) {
-  //   // You might want to show a loading spinner or some indication while checking authentication
-  //   return <div>Loading...</div>;
-  // }
 
   return (
     <Router>
