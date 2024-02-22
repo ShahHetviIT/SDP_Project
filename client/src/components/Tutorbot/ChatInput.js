@@ -36,11 +36,11 @@ export default function ChatInput({ handleSendMsg, currentChat, getSocket }) {
     fileInputRef.current.click();
   };
 
-  const sendFile = async (e) => {
+  const sendFile =  (e) => {
     e.preventDefault();
     // Using spread syntax to create a new array with the selected files
     const selectedFiles = [...e.target.files];
-    const data = await JSON.parse(sessionStorage.getItem("user"));
+    const data =  JSON.parse(sessionStorage.getItem("user"));
     const formData = new FormData();
     console.log(selectedFiles[0].name);
     formData.append("title", selectedFiles[0].name);
@@ -52,7 +52,7 @@ export default function ChatInput({ handleSendMsg, currentChat, getSocket }) {
 
     // handleSendMsg(formData);
 
-    const result = await axios.post(
+    const result =  axios.post(
       uploadFilesMessages,
       formData,
       {
