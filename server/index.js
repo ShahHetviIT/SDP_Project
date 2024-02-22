@@ -98,7 +98,7 @@ const server = app.listen(process.env.PORT, () =>
 
 const io = socket(server, {
   cors: {
-    origin: "https://mentor-mingle-web.onrender.com",
+    origin: `${process.env.FRONTEND_URL}`,
     credentials: true,
   },
 });

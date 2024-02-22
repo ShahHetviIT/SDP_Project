@@ -1,4 +1,4 @@
-export const host = "https://mentor-mingle-api.onrender.com";
+export const host = `${process.env.BACKEND_URL}`;
 export const loginRoute = `${host}/api/auth/login`;
 export const marksAttendanceRoute = `${host}/api/auth/addMarksAttendance`;
 export const getMarksAttendanceRoute = `${host}/api/auth/getMarksAttendance`;
