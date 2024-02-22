@@ -62,14 +62,41 @@ export default function ChatContainer({ currentChat, currentUser, socket }) {
   //   setMessages(msgs);
   // };
 
+  // const getSocket = async (msg, title) => {
+  //   console.log(msg);
+  //   const data = await JSON.parse(sessionStorage.getItem("user"));
+  //   try {
+  //     setMessages((prevState) => [
+  //       ...prevState,
+  //       { fromSelf: true, message: msg },
+  //     ]);
+  //     if (socket.current && socket.current.connected) {
+  //       console.log("msg send");
+  //       socket.current.emit("send-msg", {
+  //         to: currentChat._id,
+  //         from: data.userId,
+  //         msg,
+  //       });
+  //     }
+  //     getPdf();
+  //   } catch (err) {
+  //     console.error("Error sending message:", err);
+  //   }
+  // };
+
   const getSocket = async (msg, title) => {
     console.log(msg);
     const data = await JSON.parse(sessionStorage.getItem("user"));
     try {
+      // Remove the loading message from the state
+      setMessages((prevState) => prevState.filter((message) => message.message !== "Loading..."));
+  
+      // Add the actual message to the state
       setMessages((prevState) => [
         ...prevState,
         { fromSelf: true, message: msg },
       ]);
+  
       if (socket.current && socket.current.connected) {
         console.log("msg send");
         socket.current.emit("send-msg", {
@@ -83,6 +110,7 @@ export default function ChatContainer({ currentChat, currentUser, socket }) {
       console.error("Error sending message:", err);
     }
   };
+  
 
   useEffect(() => {
     getPdf();

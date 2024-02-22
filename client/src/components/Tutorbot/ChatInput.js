@@ -36,39 +36,67 @@ export default function ChatInput({ handleSendMsg, currentChat, getSocket }) {
     fileInputRef.current.click();
   };
 
-  const sendFile =  async(e) => {
-    e.preventDefault();
-    // Using spread syntax to create a new array with the selected files
-    const selectedFiles = [...e.target.files];
-    const data =  await JSON.parse(sessionStorage.getItem("user"));
-    const formData = new FormData();
-    console.log(selectedFiles[0].name);
-    formData.append("title", selectedFiles[0].name);
-    formData.append("file", selectedFiles[0]);
-    formData.append("from", data.userId); // Assuming data.userId is the 'from' value
-    formData.append("to", currentChat._id);
+  // const sendFile =  async(e) => {
+  //   e.preventDefault();
+  //   // Using spread syntax to create a new array with the selected files
+  //   const selectedFiles = [...e.target.files];
+  //   const data =  await JSON.parse(sessionStorage.getItem("user"));
+  //   const formData = new FormData();
+  //   console.log(selectedFiles[0].name);
+  //   formData.append("title", selectedFiles[0].name);
+  //   formData.append("file", selectedFiles[0]);
+  //   formData.append("from", data.userId); // Assuming data.userId is the 'from' value
+  //   formData.append("to", currentChat._id);
 
-    console.log(formData);
+  //   console.log(formData);
 
-    // handleSendMsg(formData);
+  //   // handleSendMsg(formData);
 
-    const result =  await axios.post(
-      uploadFilesMessages,
-      formData,
-      {
-        headers: { "Content-Type": "multipart/form-data" },
-      }
-    );
-    console.log(result);
-    const fileName = selectedFiles[0].name;
+  //   const result =  await axios.post(
+  //     uploadFilesMessages,
+  //     formData,
+  //     {
+  //       headers: { "Content-Type": "multipart/form-data" },
+  //     }
+  //   );
+  //   console.log(result);
+  //   const fileName = selectedFiles[0].name;
 
-    getSocket(fileName,selectedFiles[0].name)
+  //   getSocket(fileName,selectedFiles[0].name)
 
     
-    // console.log("bedore");
+  //   // console.log("bedore");
    
-    // console.log("after");
+  //   // console.log("after");
+  // };
+
+  const sendFile = async (e) => {
+    e.preventDefault();
+    const selectedFiles = [...e.target.files];
+    const data = await JSON.parse(sessionStorage.getItem("user"));
+    const formData = new FormData();
+    formData.append("title", selectedFiles[0].name);
+    formData.append("file", selectedFiles[0]);
+    formData.append("from", data.userId);
+    formData.append("to", currentChat._id);
+  
+    // Display loading message
+    getSocket("Loading...", null);
+  
+    try {
+      const result = await axios.post(uploadFilesMessages, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      console.log(result);
+      const fileName = selectedFiles[0].name;
+  
+      // Call getSocket with the actual parameters after file upload
+      getSocket(fileName, selectedFiles[0].name);
+    } catch (error) {
+      console.error("Error uploading file:", error);
+    }
   };
+  
 
   // useEffect(() => {
   //   getPdf();
