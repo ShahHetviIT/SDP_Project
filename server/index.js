@@ -14,7 +14,7 @@ const pdfTemplete = require('./documents/index');
 const app = express();
 
 const bodyParser = require('body-parser');
-const pdf = require('html-pdf');
+// const pdf = require('html-pdf');
 const path = require("path");
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
