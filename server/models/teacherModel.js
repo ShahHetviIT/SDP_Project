@@ -7,6 +7,7 @@ const teacherSchema = new mongoose.Schema({
   avatarImage: String,
   profileImage: String,
   isProfileImageSet: Boolean,
+  EnrollmentYear: Number,
   role: { type: String, default: 'teacher' },
 });
 

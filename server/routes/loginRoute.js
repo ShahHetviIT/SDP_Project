@@ -9,6 +9,10 @@ const {
   getStudentMarksAttendance,
   getTotalStudentMarksAttendance,
   getCurrentStudentDetails,
+  addMarksAttendanceExternal,
+  getStudentMarksAttendanceExternal,
+  getTotalMarksAttendanceExternal,
+  getCurrentStudentSessionalMarks
 } = require("../controllers/loginController");
 const upload = require("../middleware/multer");
 const studentModel = require("../models/studentModel");
@@ -18,14 +22,18 @@ const router = require("express").Router();
 
 router.post("/login", login);
 router.post("/addMarksAttendance", addMarksAttendance);
+router.post("/addMarksAttendanceExternal",addMarksAttendanceExternal);
 router.post("/setavatar/:id/:role", setAvatar);
 router.get("/allusersteacher/:id", getAllUsersTeachers);
 router.get("/alluserstudent/:id", getAllUsersStudents);
 router.get("/alluserstudent", getAllStudents);
 router.get("/getTeacherSubjectName/:id", getTeacherSubjects);
 router.post("/getMarksAttendance", getStudentMarksAttendance);
+router.post("/getMarksAttendanceExternal",getStudentMarksAttendanceExternal)
 router.post("/getTotalMarksAttendance", getTotalStudentMarksAttendance);
+router.post("/getTotalMarksAttendanceExternal",getTotalMarksAttendanceExternal);
 router.get("/getCurrentStudent/:id",getCurrentStudentDetails);
+router.post("/getCurrentStudentMarks/:id",getCurrentStudentSessionalMarks);
 
 router.post("/setProfileImage", upload.single("file"), async (req, res) => {
   try {

@@ -4,13 +4,47 @@ const cors = require("cors");
 const loginRoute = require("./routes/loginRoute");
 const messageRoute = require("./routes/messagesRoute");
 const classroomRoute = require("./routes/classroomRoute");
-// const files = require("./routes/files");
 const socket = require("socket.io");
+
+const pdfTemplete = require('./documents/index');
+
 const app = express();
+
+const bodyParser = require('body-parser');
+const pdf = require('html-pdf');
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+
 app.use(cors());
 app.use(express.json());
+
 require("dotenv").config();
 app.use("/files",express.static("files"));
+
+//fetch pdf
+
+app.post('/api/external/create-pdf', (req, res) => {
+  console.log(req.body.subjectDetailsArray); // Log the subjectDetailsArray
+  
+  // Call pdf.create with the correct parameters
+  pdf.create(pdfTemplete(req.body), {}).toFile('result.pdf', (err) => {
+      if (err) {
+          console.error(err);
+          res.status(500).send('Error creating PDF');
+      } else {
+          console.log('PDF created successfully');
+          res.status(200).send('PDF created successfully');
+      }
+  });
+});
+
+
+//get pdf
+
+app.get('/api/external/fetch-pdf',(req,res)=>{
+  res.sendFile(`${__dirname}/result.pdf`)
+})
 
 // mongoose.connect('mongodb://127.0.0.1:27017/Login');
 

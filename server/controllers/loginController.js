@@ -1,5 +1,7 @@
+const { model } = require("mongoose");
 const StudentModel = require("../models/studentModel");
 const TeacherModel = require("../models/teacherModel");
+// const semester6 = require("../models/semester6Model");
 
 // Adjust the path as needed
 const bcrypt = require("bcrypt");
@@ -31,6 +33,7 @@ module.exports.login = async (req, res, next) => {
               isAvatarImageSet: user.isAvatarImageSet,
               profileImage: user.profileImage,
               isProfileImageSet: user.isProfileImageSet,
+              EnrollmentYear: user.EnrollmentYear, 
             };
             console.log(varName);
             return res.json(varName);
@@ -197,8 +200,11 @@ module.exports.getAllStudents = async (req, res, next) => {
 // Controller function to add marks and attendance
 module.exports.addMarksAttendance = async (req, res, next) => {
   try {
-    const { marks, total, sessional } = req.body;
+    const { marks, total, sessional,semester } = req.body;
     console.log(sessional);
+    const modelName = semester+"Model";
+    console.log(modelName);
+    const Model = require(`../models/${modelName}`);
 
     // Iterate through the marks data array
     for (const studentData of marks) {
@@ -206,7 +212,7 @@ module.exports.addMarksAttendance = async (req, res, next) => {
       const studentMarks = studentData.marks;
 
       // Find the student document by ID
-      const student = await StudentModel.findById(studentId);
+      const student = await Model.findById(studentId);
 
       if (!student) {
         console.log(`Student with ID ${studentId} not found.`);
@@ -236,7 +242,7 @@ module.exports.addMarksAttendance = async (req, res, next) => {
       const studentId = studentData._id;
 
       // Find the student document by ID
-      const student = await StudentModel.findById(studentId);
+      const student = await Model.findById(studentId);
 
       if (!student) {
         console.log(`Student with ID ${studentId} not found.`);
@@ -276,14 +282,94 @@ module.exports.addMarksAttendance = async (req, res, next) => {
   }
 };
 
+module.exports.addMarksAttendanceExternal = async (req,res, next) => {
+  try {
+    const { marks, total, external,semester} = req.body;
+    console.log(external);
+    const modelName = semester+"Model";
+    console.log(modelName);
+    const Model = require(`../models/${modelName}`);
+
+    // Iterate through the marks data array
+    for (const studentData of marks) {
+      const studentId = studentData._id;
+      const studentMarks = studentData.marks;
+
+      // Find the student document by ID
+      const student = await Model.findById(studentId);
+
+      if (!student) {
+        console.log(`Student with ID ${studentId} not found.`);
+        continue; // Skip to the next iteration
+      }
+
+      // Update the marks for each subject
+      for (const [subject, { marks, type }] of Object.entries(studentMarks)) {
+        if (type === "lecture") {
+          // Update lecture marks
+          student.external.marksLecture[subject] = marks;
+        } else if (type === "lab") {
+          // Update lab marks
+          student.external.marksLab[subject] = marks;
+        }
+      }
+
+      // Save the updated student document
+      await student.save();
+    }
+
+    // Update total marks
+    for (const [subject, { totalMarks, type }] of Object.entries(total)) {
+      for (const studentData of marks) {
+        const studentId = studentData._id;
+
+        // Find the student document by ID
+        const student = await Model.findById(studentId);
+
+        if (!student) {
+          console.log(`Student with ID ${studentId} not found.`);
+          continue; // Skip to the next iteration
+        }
+
+        if (type === "lecture") {
+          // Update lecture total marks
+          student.external.totalExamMarks[subject] = totalMarks;
+        } else if (type === "lab") {
+          // Update lab total marks
+          student.external.totalLabMarks[subject] = totalMarks;
+        }
+
+        // Save the updated student document
+        await student.save();
+      }
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Marks and attendance added successfully.",
+    });
+  } catch (error) {
+    console.log("Error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Error adding marks and attendance.",
+    });
+  }
+};
+
+
+
 // Controller function to get marks and attendance data for students
 module.exports.getStudentMarksAttendance = async (req, res, next) => {
   try {
-    const { studentContacts, sessional } = req.body;
+    const { studentContacts, sessional,semester } = req.body;
+    const modelName = semester+"Model";
+    console.log(modelName);
+    const Model = require(`../models/${modelName}`);
     const studentIds = studentContacts.map((student) => student._id);
-
+    
     // Fetch student documents from the database using the provided IDs
-    const students = await StudentModel.find({ _id: { $in: studentIds } });
+    const students = await Model.find({ _id: { $in: studentIds } });
 
     // Construct an object to store marks and attendance data for each student
     const marksAttendanceData = {};
@@ -297,6 +383,7 @@ module.exports.getStudentMarksAttendance = async (req, res, next) => {
       };
     });
 
+    console.log(marksAttendanceData);
     // Send the marks and attendance data in the response
     res.json(marksAttendanceData);
   } catch (error) {
@@ -305,14 +392,78 @@ module.exports.getStudentMarksAttendance = async (req, res, next) => {
   }
 };
 
+module.exports.getStudentMarksAttendanceExternal = async (req, res, next) => {
+  try {
+    const { studentContacts, external,semester } = req.body;
+    const studentIds = studentContacts.map((student) => student._id);
+    const modelName = semester+"Model";
+    // console.log(modelName);
+    const Model = require(`../models/${modelName}`);
+
+    // Fetch student documents from the database using the provided IDs
+    const students = await Model.find({ _id: { $in: studentIds } });
+
+    // Construct an object to store marks and attendance data for each student
+    const marksAttendanceData = {};
+    // console.log(external);
+
+    // Iterate over each student and extract marks and attendance data
+    students.forEach((student) => {
+      marksAttendanceData[student._id] = {
+        marksLecture: student[external].marksLecture,
+        marksLab: student[external].marksLab,
+      };
+    });
+
+    // Send the marks and attendance data in the response
+    res.json(marksAttendanceData);
+  } catch (error) {
+    console.log("Error fetching marks and attendance External:", error);
+    res.status(500).json({ success: false, message: "Internal server error" });
+  }
+};
+
+module.exports.getTotalMarksAttendanceExternal = async (req, res, next) => {
+  try {
+    const { studentContacts, external,semester } = req.body;
+    const studentIds = studentContacts.map((student) => student._id);
+    const modelName = semester+"Model";
+    // console.log(modelName);
+    const Model = require(`../models/${modelName}`);
+
+    // Fetch student document from the database using the ID of the first student
+    const firstStudent = await Model.findOne({ _id: studentIds[0] });
+
+    if (!firstStudent) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Student not found" });
+    }
+
+    const totalMarksAttendanceData = {
+      totalExamMarks: firstStudent[external].totalExamMarks,
+      totalLabMarks: firstStudent[external].totalLabMarks,
+      // totalAttendanceLab: firstStudent[external].totalAttendanceLab,
+    };
+
+    res.json(totalMarksAttendanceData);
+  } catch (error) {
+    console.log("Error fetching Total marks and attendance:", error);
+    res.status(500).json({ success: false, message: "Internal server error" });
+  }
+};
+
 // Controller function to get total marks and attendance data for students
 module.exports.getTotalStudentMarksAttendance = async (req, res, next) => {
   try {
-    const { studentContacts, sessional } = req.body;
+    const { studentContacts, sessional,semester } = req.body;
+    const modelName = semester+"Model";
+    // console.log(modelName);
+    const Model = require(`../models/${modelName}`);
     const studentIds = studentContacts.map((student) => student._id);
 
     // Fetch student document from the database using the ID of the first student
-    const firstStudent = await StudentModel.findOne({ _id: studentIds[0] });
+    const firstStudent = await Model.findOne({ _id: studentIds[0] });
 
     if (!firstStudent) {
       return res
@@ -364,6 +515,32 @@ module.exports.getCurrentStudentDetails = async (req, res, next) => {
     }
 
     // console.log(teacherData);
+
+    return res.json(studentData);
+  } catch (err) {
+    console.error("Error:", err);
+    next(err);
+  }
+};
+
+module.exports.getCurrentStudentSessionalMarks = async (req, res, next) =>  {
+  try {
+    // console.log("heloooooo");
+    const {semester } = req.body;
+    // console.log(semester);
+    const modelName = semester+"Model";
+    // console.log(modelName);
+    const Model = require(`../models/${modelName}`);
+
+    const userId = req.params.id;
+    // console.log("User ID:", userId);
+
+    const studentData = await Model.findById(userId);
+    if (!studentData) {
+      return res.status(404).json({ error: "Teacher not found" });
+    }
+
+    // console.log(studentData);
 
     return res.json(studentData);
   } catch (err) {

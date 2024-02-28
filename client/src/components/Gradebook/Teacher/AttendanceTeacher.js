@@ -7,11 +7,12 @@ import { useNavigate } from "react-router-dom";
 import {
   allUsersRouteStudents,
   getTeacherSubjectRoute,
-  host
+  host,
 } from "../../../utils/APIRoutes";
 import Sessional1 from "./Sessional1";
 import Sessional2 from "./Sessional2";
 import Sessional3 from "./Sessional3";
+import External from "./External";
 // import "bootstrap/dist/css/bootstrap.min.css";
 
 export default function AttendanceTeacher() {
@@ -21,6 +22,7 @@ export default function AttendanceTeacher() {
   const [sessioanl1, setSessional1] = useState(false);
   const [sessioanl2, setSessional2] = useState(false);
   const [sessioanl3, setSessional3] = useState(false);
+  const [external, setExternal] = useState(false);
   const [teacherLecture, setTeacherLecture] = useState([]);
   const [teacherLab, setTeacherLab] = useState([]);
   const [currentUserName, setCurrentUserName] = useState(undefined);
@@ -92,18 +94,28 @@ export default function AttendanceTeacher() {
     setSessional1(true);
     setSessional2(false);
     setSessional3(false);
+    setExternal(false);
   };
 
   const handleSessiaonal2 = () => {
     setSessional1(false);
     setSessional2(true);
     setSessional3(false);
+    setExternal(false);
   };
 
   const handleSessiaonal3 = () => {
     setSessional1(false);
     setSessional2(false);
     setSessional3(true);
+    setExternal(false);
+  };
+
+  const handleExternal = () => {
+    setSessional1(false);
+    setSessional2(false);
+    setSessional3(false);
+    setExternal(true);
   };
 
   useEffect(() => {
@@ -168,6 +180,9 @@ export default function AttendanceTeacher() {
       )}
 
       <div className="sessionalButtons">
+        <button className="btn">
+          <span> Dashboard</span>
+        </button>
         <button onClick={handleSessiaonal1} className="btn">
           <span>Sessional 1</span>
         </button>
@@ -176,6 +191,9 @@ export default function AttendanceTeacher() {
         </button>
         <button onClick={handleSessiaonal3} className="btn">
           <span>Sessional 3</span>
+        </button>
+        <button onClick={handleExternal} className="btn">
+          <span>External</span>
         </button>
       </div>
 
@@ -198,6 +216,14 @@ export default function AttendanceTeacher() {
 
         {sessioanl3 && (
           <Sessional3
+            studentContacts={studentContacts}
+            teacherLecture={teacherLecture}
+            teacherLab={teacherLab}
+          />
+        )}
+
+        {external && (
+          <External
             studentContacts={studentContacts}
             teacherLecture={teacherLecture}
             teacherLab={teacherLab}

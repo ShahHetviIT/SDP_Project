@@ -52,8 +52,10 @@ export default function Sessional1({
       try {
         // console.log(studentContacts);
         // Fetch marks and attendance data from the server
+        const data = await JSON.parse(sessionStorage.getItem("user"));
+        const semester = "semester"+data.semester;
         const response = await axios.post(getMarksAttendanceRoute, {
-          studentContacts,sessional
+          studentContacts,sessional,semester
         });
 
         // Map the fetched data to update the marks state
@@ -85,7 +87,7 @@ export default function Sessional1({
         setMarks(updatedMarks);
 
         const response1 = await axios.post(getTotalMarksAttendanceRoute, {
-          studentContacts,sessional
+          studentContacts,sessional,semester
         });
 
         const { totalExamMarks, totalAttendanceLecture, totalAttendanceLab } =
@@ -142,8 +144,10 @@ export default function Sessional1({
     // console.log("Saved marks:", marks);
 
     try {
+      const data = await JSON.parse(sessionStorage.getItem("user"));
+        const semester = "semester"+data.semester;
       const sessional = "sessional1";
-      const result = await axios.post(marksAttendanceRoute, { marks, total, sessional});
+      const result = await axios.post(marksAttendanceRoute, { marks, total, sessional,semester});
 
       if (result.data.success) {
         console.log("Marks inserted Successfully");

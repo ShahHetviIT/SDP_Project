@@ -21,6 +21,21 @@ function Login() {
   const navigate = useNavigate();
   // const history = useHistory();
 
+  const calculateCurrentSemester = (enrollmentYear) => {
+    const currentYear = new Date().getFullYear();
+    const yearsSinceEnrollment = currentYear - enrollmentYear;
+    // Each year contains 2 semesters
+    const totalSemesters = yearsSinceEnrollment * 2;
+    const currentMonth = new Date().getMonth() + 1; // Adding 1 because getMonth() returns zero-based index
+    
+    // Assuming each semester starts in June and December
+    if (currentMonth >= 6 && currentMonth < 12) {
+        return totalSemesters  - 1; // For odd semesters (June to December)
+    } else {
+        return totalSemesters; // For even semesters (December to June)
+    }
+};
+
   const validateForm = () => {
     // Simple validation: Check if fields are empty
     if (!username) {
@@ -72,6 +87,8 @@ function Login() {
         const isAvatarImageSet = result.data.isAvatarImageSet;
         const isProfileImageSet = result.data.isProfileImageSet;
         const profileImage = result.data.profileImage;
+        const semester = calculateCurrentSemester(result.data.EnrollmentYear);
+        const EnrollmentYear = result.data.EnrollmentYear;
         // Store the authentication token securely (e.g., in local storage)
         sessionStorage.setItem(
           "user",
@@ -83,6 +100,8 @@ function Login() {
             isAvatarImageSet: isAvatarImageSet,
             isProfileImageSet: isProfileImageSet,
             profileImage: profileImage,
+            semester: semester,
+            enrollmentYear : EnrollmentYear,
           })
         );
 

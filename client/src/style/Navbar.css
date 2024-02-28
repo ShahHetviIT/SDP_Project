@@ -73,7 +73,7 @@ ul li a svg{
 .closebtn:hover{
     color: #172b4d;
 }
-::-webkit-scrollbar {
+/* ::-webkit-scrollbar {
   width: 10px;
 }
 
@@ -84,5 +84,5 @@ ul li a svg{
 }
 ::-webkit-scrollbar-thumb:hover {
   background: transparent; 
-}
+} */
   

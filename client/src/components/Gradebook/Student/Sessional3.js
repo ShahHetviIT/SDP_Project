@@ -2,26 +2,41 @@ import React from 'react';
 
 export default function Sessional3({ currentStudent }) {
   const sessional3Data = currentStudent.sessional3;
-  const subjects = currentStudent.subjects;
+  console.log(sessional3Data);
+  const subjects = currentStudent.subjects || [];
 
   const totalMarks = subjects.reduce((total, subject) => {
-    return total + (parseInt(sessional3Data.marksLecture[subject]?.reduce((acc, mark) => acc + mark, 0)) || 0);
+    console.log(subject);
+    return (
+      total +
+      (parseInt(
+        sessional3Data.marksLecture[subject.name]?.reduce(
+          (acc, mark) => acc + mark,
+          0
+        )
+      ) || 0)
+    );
   }, 0);
-  
+
   // Convert totalExamMarks to integers and calculate total possible marks
   const totalPossibleMarks = subjects.reduce((total, subject) => {
-    return total + (parseInt(sessional3Data.totalExamMarks[subject]) || 0);
+    return total + (parseInt(sessional3Data.totalExamMarks[subject.name]) || 0);
   }, 0);
-  
+
   // Convert attendance to integers and calculate total attendance
   const totalAttendance = subjects.reduce((total, subject) => {
-    return total + (parseInt(sessional3Data.attendanceLecture[subject]) || 0) + (parseInt(sessional3Data.attendanceLab[subject]) || 0);
+    return (
+      total +
+      (parseInt(sessional3Data.attendanceLecture[subject.name]) || 0) +
+      (parseInt(sessional3Data.attendanceLab[subject.name]) || 0)
+    );
   }, 0);
-  
-// Calculate total possible attendance based on the actual number of lectures and labs for each subject
-const totalPossibleAttendance = subjects.reduce((total, subject) => {
-    const lectures = parseInt(sessional3Data.totalAttendanceLecture[subject]) || 0;
-    const labs = parseInt(sessional3Data.totalAttendanceLab[subject]) || 0;
+
+  // Calculate total possible attendance based on the actual number of lectures and labs for each subject
+  const totalPossibleAttendance = subjects.reduce((total, subject) => {
+    const lectures =
+      parseInt(sessional3Data.totalAttendanceLecture[subject.name]) || 0;
+    const labs = parseInt(sessional3Data.totalAttendanceLab[subject.name]) || 0;
     // Ensure lectures and labs are valid numbers
     const totalAttendanceForSubject = parseInt(lectures) + parseInt(labs);
     console.log(totalAttendanceForSubject);
@@ -40,10 +55,11 @@ const totalPossibleAttendance = subjects.reduce((total, subject) => {
       <table>
         <thead>
           <tr>
-            <th colSpan="7">Sessional 3</th>
+            <th colSpan="8">Sessional 3</th>
           </tr>
           <tr>
-            <th className='wid' colSpan="1">Subject Name</th>
+          <th style={{width:'5%'}} colSpan="1">Subject Code</th>
+            <th style={{width: '20%'}} className='wid' colSpan="1">Subject Name</th>
             <th className='wid' colSpan="1">Marks</th>
             <th className='wid' colSpan="1">Marks Out Of</th>
             <th className='wid' colSpan="1">Lecture Attendance</th>
@@ -55,13 +71,14 @@ const totalPossibleAttendance = subjects.reduce((total, subject) => {
         <tbody>
           {subjects.map((subject, index) => (
             <tr key={index}>
-              <td>{subject}</td>
-              <td>{sessional3Data.marksLecture[subject]?.join(", ") || ''}</td>
-              <td>{sessional3Data.totalExamMarks[subject]}</td>
-              <td>{sessional3Data.attendanceLecture[subject]}</td>
-              <td>{sessional3Data.totalAttendanceLecture[subject]}</td>
-              <td>{sessional3Data.attendanceLab[subject]}</td>
-              <td>{sessional3Data.totalAttendanceLab[subject]}</td>
+              <td>{subject.code}</td>
+              <td>{subject.fullName}</td>
+              <td>{sessional3Data.marksLecture[subject.name]?.join(", ") || ''}</td>
+              <td>{sessional3Data.totalExamMarks[subject.name]}</td>
+              <td>{sessional3Data.attendanceLecture[subject.name]}</td>
+              <td>{sessional3Data.totalAttendanceLecture[subject.name]}</td>
+              <td>{sessional3Data.attendanceLab[subject.name]}</td>
+              <td>{sessional3Data.totalAttendanceLab[subject.name]}</td>
             </tr>
           ))}
         </tbody>
