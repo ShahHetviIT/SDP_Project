@@ -5,6 +5,9 @@ const loginRoute = require("./routes/loginRoute");
 const messageRoute = require("./routes/messagesRoute");
 const classroomRoute = require("./routes/classroomRoute");
 const socket = require("socket.io");
+const https = require("https");
+const fs = require("fs");
+
 
 const pdfTemplete = require('./documents/index');
 
@@ -12,6 +15,7 @@ const app = express();
 
 const bodyParser = require('body-parser');
 const pdf = require('html-pdf');
+const path = require("path");
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -45,6 +49,15 @@ app.post('/api/external/create-pdf', (req, res) => {
 app.get('/api/external/fetch-pdf',(req,res)=>{
   res.sendFile(`${__dirname}/result.pdf`)
 })
+
+// SSL options
+const sslOptions = {
+  key: fs.readFileSync(path.join(__dirname,'sslCertificates','key.pem')),
+  cert: fs.readFileSync(path.join(__dirname,'sslCertificates','cert.pem'))
+};
+
+// Create HTTPS server
+const ser = https.createServer(sslOptions, app);
 
 // mongoose.connect('mongodb://127.0.0.1:27017/Login');
 
