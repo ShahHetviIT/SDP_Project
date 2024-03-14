@@ -26,9 +26,8 @@ export default function SetAvatar() {
     const fetchData = async () => {
       try {
         console.log("setAvatar");
-        if (!sessionStorage.getItem("user"))
-          navigate("/login");
-  
+        if (!sessionStorage.getItem("user")) navigate("/login");
+
         const data = [];
         for (let i = 0; i < 4; i++) {
           const image = await axios.get(
@@ -36,9 +35,9 @@ export default function SetAvatar() {
           );
           const buffer = new Buffer(image.data);
           data.push(buffer.toString("base64"));
-  
+
           // Introduce a delay (e.g., 500 milliseconds) between requests
-          await new Promise(resolve => setTimeout(resolve, 500));
+          await new Promise((resolve) => setTimeout(resolve, 500));
         }
         setAvatars(data);
         setIsLoading(false);
@@ -47,34 +46,33 @@ export default function SetAvatar() {
         setIsLoading(false);
       }
     };
-  
+
     fetchData();
   }, [api, navigate]);
-  
 
   const setProfilePicture = async () => {
     if (selectedAvatar === undefined) {
       toast.error("Please select an avatar", toastOptions);
     } else {
-      const user = await JSON.parse(
-        sessionStorage.getItem("user")
-      );
+      const user = await JSON.parse(sessionStorage.getItem("user"));
       console.log(user.userId);
-      const { data } = await axios.post(`${setAvatarRoute}/${user.userId}/${user.role}`, {
-        image: avatars[selectedAvatar],
-      });
+      const { data } = await axios.post(
+        `${setAvatarRoute}/${user.userId}/${user.role}`,
+        {
+          image: avatars[selectedAvatar],
+        }
+      );
 
       if (data.isSet) {
         user.isAvatarImageSet = true;
         user.avatarImage = data.image;
-        sessionStorage.setItem(
-          "user",
-          JSON.stringify(user)
-        );
+        user.isProfileImageSet = false;
+        user.profileImage = "";
+        sessionStorage.setItem("user", JSON.stringify(user));
         console.log(user);
-        if(user.role==='teacher'){
+        if (user.role === "teacher") {
           navigate("/teacherDashboard");
-        }else{
+        } else {
           navigate("/studentDashboard");
         }
       } else {
@@ -103,10 +101,7 @@ export default function SetAvatar() {
                 key={avatar}
                 onClick={() => setSelectedAvatar(index)}
               >
-                <img
-                  src={`data:image/svg+xml;base64,${avatar}`}
-                  alt="avatar"
-                />
+                <img src={`data:image/svg+xml;base64,${avatar}`} alt="avatar" />
               </div>
             ))}
           </div>

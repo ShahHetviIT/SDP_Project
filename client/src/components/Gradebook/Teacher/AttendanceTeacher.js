@@ -13,6 +13,8 @@ import Sessional1 from "./Sessional1";
 import Sessional2 from "./Sessional2";
 import Sessional3 from "./Sessional3";
 import External from "./External";
+import Gradebook from "../../../assets/gradebook.png";
+import Logout from "../../Logout";
 // import "bootstrap/dist/css/bootstrap.min.css";
 
 export default function AttendanceTeacher() {
@@ -90,6 +92,10 @@ export default function AttendanceTeacher() {
     fetchData();
   }, [navigate]);
 
+  const handleDashboardNavigate = () => {
+    navigate("/teacherDashboard");
+  }
+
   const handleSessiaonal1 = () => {
     setSessional1(true);
     setSessional2(false);
@@ -137,16 +143,10 @@ export default function AttendanceTeacher() {
     <div className="container-body">
       <nav className="navbar navbar-expand-lg navbar-light bg-primary">
         <div className="container-fluid">
-          <button
-            className="btn navbar-toggler"
-            type="button"
-            onClick={toggleSidebar}
-            aria-label="Toggle navigation"
-          >
-            <span className="navbar-toggler-icon"></span>
-          </button>
-
-          <a className="navbar-brand">Navbar</a>
+        <div className="gradebookTitle">
+            <img src={Gradebook} alt="" />
+            <div>Gradebook</div>
+          </div>
           <div className="current-user">
             {currentImageType === "avatar" && (
               <div className="avatar">
@@ -169,18 +169,13 @@ export default function AttendanceTeacher() {
             <div className="username">
               <h2>Welcome {currentUserName} !</h2>
             </div>
+            <Logout />
           </div>
         </div>
       </nav>
-      {sidebarOpen && (
-        <div className="sidebar">
-          <div>hello</div>
-          <div>hello</div>
-        </div>
-      )}
 
-      <div className="sessionalButtons">
-        <button className="btn">
+      <div style={{paddingTop:"40px"}} className="sessionalButtons">
+        <button onClick={handleDashboardNavigate} className="btn">
           <span> Dashboard</span>
         </button>
         <button onClick={handleSessiaonal1} className="btn">

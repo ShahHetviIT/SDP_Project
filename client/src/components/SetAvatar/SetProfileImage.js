@@ -46,6 +46,8 @@ export default function SetProfileImage() {
     const user = JSON.parse(sessionStorage.getItem("user"));
     user.isProfileImageSet = true;
     user.profileImage = imageURL;
+    user.isAvatarImageSet = false;
+    user.avatarImage = "";
     sessionStorage.setItem(
         "user",
         JSON.stringify(user)

@@ -12,7 +12,7 @@ const {
   addMarksAttendanceExternal,
   getStudentMarksAttendanceExternal,
   getTotalMarksAttendanceExternal,
-  getCurrentStudentSessionalMarks
+  getCurrentStudentSessionalMarks,
 } = require("../controllers/loginController");
 const upload = require("../middleware/multer");
 const studentModel = require("../models/studentModel");
@@ -22,18 +22,21 @@ const router = require("express").Router();
 
 router.post("/login", login);
 router.post("/addMarksAttendance", addMarksAttendance);
-router.post("/addMarksAttendanceExternal",addMarksAttendanceExternal);
+router.post("/addMarksAttendanceExternal", addMarksAttendanceExternal);
 router.post("/setavatar/:id/:role", setAvatar);
 router.get("/allusersteacher/:id", getAllUsersTeachers);
 router.get("/alluserstudent/:id", getAllUsersStudents);
 router.get("/alluserstudent", getAllStudents);
 router.get("/getTeacherSubjectName/:id", getTeacherSubjects);
 router.post("/getMarksAttendance", getStudentMarksAttendance);
-router.post("/getMarksAttendanceExternal",getStudentMarksAttendanceExternal)
+router.post("/getMarksAttendanceExternal", getStudentMarksAttendanceExternal);
 router.post("/getTotalMarksAttendance", getTotalStudentMarksAttendance);
-router.post("/getTotalMarksAttendanceExternal",getTotalMarksAttendanceExternal);
-router.get("/getCurrentStudent/:id",getCurrentStudentDetails);
-router.post("/getCurrentStudentMarks/:id",getCurrentStudentSessionalMarks);
+router.post(
+  "/getTotalMarksAttendanceExternal",
+  getTotalMarksAttendanceExternal
+);
+router.get("/getCurrentStudent/:id", getCurrentStudentDetails);
+router.post("/getCurrentStudentMarks/:id", getCurrentStudentSessionalMarks);
 
 router.post("/setProfileImage", upload.single("file"), async (req, res) => {
   try {
@@ -53,7 +56,10 @@ router.post("/setProfileImage", upload.single("file"), async (req, res) => {
     // Assuming you want to save the file path or other information in the user's profile
     // You can update the user's profile (student or teacher) with the file information
     if (role === "student") {
+      
       await studentModel.findByIdAndUpdate(id, {
+        avatarImage: "",
+        isAvatarImageSet: false,
         profileImage: fileName,
         isProfileImageSet: true,
       });
@@ -61,6 +67,8 @@ router.post("/setProfileImage", upload.single("file"), async (req, res) => {
       await teacherModel.findByIdAndUpdate(id, {
         profileImage: fileName,
         isProfileImageSet: true,
+        avatarImage: "",
+        isAvatarImageSet: false,
       });
     }
 

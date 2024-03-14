@@ -153,7 +153,7 @@ import { getCurrentStudentMarksRoute, host } from "../../../utils/APIRoutes";
 import axios from "axios";
 import Gradebook from "../../../assets/gradebook.png";
 import Logout from "../../Logout";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import External from "./External";
 import { fetchPdfRoute } from "../../../utils/APIRoutes";
 
@@ -170,6 +170,7 @@ export default function AttendanceStudent() {
   const [enrollmentYear, setEnrollmentYear] = useState(null);
   const [examResult, setExamResult] = useState(true);
   const [semesterClick, setSemesterClick] = useState(null);
+  const navigate = useNavigate();
 
   const generateRows = () => {
     return Array.from({ length: currentsemester }, (_, index) => index + 1);
@@ -213,6 +214,10 @@ export default function AttendanceStudent() {
       console.error("Error fetching user data:", error);
     }
   };
+
+  const handleDashboardNavigate = () => {
+    navigate("/studentDashboard");
+  }
 
   const handleSessiaonal1 = (semester) => {
     const sem = "semester" + semester;
@@ -335,7 +340,7 @@ export default function AttendanceStudent() {
       </nav>
 
       <div className="sessionalButtons">
-        <button className="btn">
+        <button onClick={handleDashboardNavigate} className="btn">
           <span> Dashboard</span>
         </button>
         <button className="btn" onClick={handleExamResult}>

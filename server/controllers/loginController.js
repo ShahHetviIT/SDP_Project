@@ -108,6 +108,8 @@ module.exports.setAvatar = async (req, res, next) => {
       const updatedTeacherData = await TeacherModel.findByIdAndUpdate(
         userId,
         {
+          isProfileImageSet: false,
+          profileImage: "",
           isAvatarImageSet: true,
           avatarImage,
         },
@@ -125,6 +127,8 @@ module.exports.setAvatar = async (req, res, next) => {
       const updatedStudentData = await StudentModel.findByIdAndUpdate(
         userId,
         {
+          isProfileImageSet: false,
+          profileImage: "",
           isAvatarImageSet: true,
           avatarImage,
         },
