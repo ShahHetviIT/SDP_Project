@@ -1,4 +1,4 @@
-const { addClassroom, getClassroom } = require("../controllers/classroomController");
+const { addClassroom, getClassroom, deleteClassroom,getArchiveClassroom } = require("../controllers/classroomController");
 const upload = require("../middleware/multer");
 const Classroom = require("../models/classroomModel");
 
@@ -6,6 +6,8 @@ const router = require("express").Router();
 
 router.post("/addClassroomDetails", addClassroom);
 router.post("/getClassroomDetails", getClassroom);
+router.post("/deleteClassroomDetails/:id", deleteClassroom);
+router.get("/getArchiveClassroomDetails",getArchiveClassroom);
 
 router.post("/upload-files", upload.single("file"), async (req, res) => {
     try {

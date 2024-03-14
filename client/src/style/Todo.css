@@ -1,0 +1,17 @@
+.todo-list-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Set the height to the full viewport height */
+  }
+  
+  .todo-list {
+    width: 600px; /* Set the width of the square box */
+    height: 600px; /* Set the height of the square box */
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 20px;
+    box-sizing: border-box;
+    background-color: #f9f9f9;
+  }
+  
