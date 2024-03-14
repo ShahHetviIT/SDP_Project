@@ -11,22 +11,18 @@ import { SiGoogleclassroom } from "react-icons/si";
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { RxCross1 } from "react-icons/rx";
-import {getClassroomDetailsRoute,getArchiveClassroomDetailsRoute} from "../../utils/APIRoutes";
+import {getClassroomDetailsRoute} from "../../utils/APIRoutes";
 
 
 const Navbar = ({ show,toggleNavbar }) => {
  // const [selectedClassroom, setSelectedClassroom] = useState(null);
   const [enrolled, setEnrolled] = useState([]);
-  const [archiveClass, setArchiveClass ] = useState([]);
   useEffect(() => {
     const fetchClassname = async () => {
       try {
         const response = await axios.post(getClassroomDetailsRoute);
-        const archive = await axios.get(getArchiveClassroomDetailsRoute);
-        // console.log("archive",archive.data);
-        // console.log(response.data);
+        console.log(response.data);
         setEnrolled(response.data);
-        setArchiveClass(archive.data);
       } catch (error) {
         console.error('Error fetching classroom details:', error);
       }
@@ -48,15 +44,17 @@ const Navbar = ({ show,toggleNavbar }) => {
           </Link>
         </li>
         <li>
-          <Link to='/Calender'>
+          <Link to='Calender'>
             <SlCalender />
             Calender
           </Link>
         </li>
         <Divider className='divider' />
-        <div className='title' >Teaching</div>
+        <div className='title'>Teaching</div>
+        <Divider className='divider' />
+        <div className='title' >Enrolled</div>
         <li>
-          <Link to='/Todo'>
+          <Link>
             <LuListTodo />To Do
           </Link>
         </li>
@@ -71,20 +69,18 @@ const Navbar = ({ show,toggleNavbar }) => {
 
 
         <Divider className='divider' />
-        <li onClick={()=>navigate(`/archive_class`)}>
-          <Link>
+        <li>
+          <Link to='/Archived_classes'>
             <IoArchiveSharp />
             Archived classes
           </Link>
         </li>
-
-        {archiveClass.map((classroom, index) => (
-            <li key={index} onClick={() => navigate(`/stream/:id`)}>
-            <Link>
-                <SiGoogleclassroom />{classroom.classname}
-            </Link>
-            </li>
-        ))}
+        <li>
+          <Link to='/Setting'>
+            <IoSettingsOutline />
+            Settings
+          </Link>
+        </li>
       </ul>
 
 

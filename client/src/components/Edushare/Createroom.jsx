@@ -12,13 +12,28 @@ import { useNavigate } from 'react-router-dom';
 import {addClassroomDetailsRoute} from "../../utils/APIRoutes";
 
 
-export default function Createroom({ setOpen, setRefreshClasscard }) {
+export default function Createroom() {
+  const [open, setOpen] = useState(false);
   const [classRoom, setClassRoom] = useState('');
   const [subject, setSubject] = useState('');
   const [teacher, setTeacher] = useState('');
   const [role, setRole] = useState(undefined);
 
-  const handleClose =() =>{
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!sessionStorage.getItem("user")) {
+      navigate("/login");
+    } else {
+      const data = JSON.parse(sessionStorage.getItem("user"));
+      setRole(data.role);
+    }
+  }, [navigate]);
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
     setOpen(false);
   };
 
@@ -36,7 +51,6 @@ export default function Createroom({ setOpen, setRefreshClasscard }) {
       });
 
       console.log(result.data.msg);
-      setRefreshClasscard(prev => !prev); 
       fetchData();
       // if(result){
       //   navigate("/classcard");
@@ -50,8 +64,8 @@ export default function Createroom({ setOpen, setRefreshClasscard }) {
 
   return (
     <React.Fragment>
-      
-      <Dialog open={true} onClose={handleClose}>
+      {role === "teacher" && <FaPlus className="plus"  style={{ cursor: 'pointer' }} onClick={handleClickOpen} />}
+      <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Create Class</DialogTitle>
         <DialogContent>
           <form style={{ boxShadow: 'none', padding: 0 }} onSubmit={(e) => {

@@ -12,8 +12,6 @@ import SetProfileImage from "./components/SetAvatar/SetProfileImage";
 import AttendanceStudent from "./components/Gradebook/Student/AttendanceStudent";
 import Stream from "./components/Edushare/Stream";
 import Home from "./components/Edushare/Home";
-import Calender from "./components/Edushare/Calender";
-import Todo from "./components/Edushare/To_do";
 
 
 const App = () => {
@@ -33,8 +31,6 @@ const App = () => {
         <Route path="/attendanceStudent" element={<AttendanceStudent/>}/>
         <Route path="/stream/:id" element={<Stream />} />
         <Route path="/edushare" element={<Home />} />
-        <Route path="/Calender" element={<Calender/>}/>
-        <Route path="/Todo" element={<Todo/>}/>
       </Routes>
     </Router>
   );

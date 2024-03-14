@@ -127,7 +127,7 @@ import axios from 'axios';
 import '../../style/Announcement.css';
 import { Divider } from '@mui/material';
 import {getFilesClassroom,host} from '../../utils/APIRoutes';
-import { RiDeleteBin6Line } from "react-icons/ri";
+
 const Announcement = ({ updateMaterials }) => {
   const [material, setMaterial] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -157,20 +157,6 @@ const Announcement = ({ updateMaterials }) => {
     console.log(description);
   };
 
-  const handleDeletePdf = async (item,pdfName) => {
-    try {
-      const response = await axios.delete('/api/pdf/deleteClassroom/_id/pdfName');
-      if (response.data.msg === 'PDF deleted successfully.') {
-        // Handle successful deletion, e.g., update state to remove the PDF from the UI
-        console.log('PDF deleted successfully.');
-      } else {
-        console.error('Failed to delete PDF.');
-      }
-    } catch (error) {
-      console.error('Error deleting PDF:', error);
-    }
-  };
-
   return (
     <div>
       {material.map((item, index) => (
@@ -186,9 +172,7 @@ const Announcement = ({ updateMaterials }) => {
               <div>{item.pdfName[pdfIndex]}</div>
               <div>{item.description[pdfIndex]}</div>
             </div>
-            <div className='pdfbtn'>
-            <button onClick={() => showPdf(pdfName, item.description)}><span>View PDF</span></button><RiDeleteBin6Line style={{fontSize: '23px', height: '50px', paddingLeft: '2px', cursor: 'pointer'}} onClick={()=>handleDeletePdf()}/>
-            </div>
+            <button onClick={() => showPdf(pdfName, item.description)}><span>View PDF</span></button>
           </div>
           <Divider />
         </div>

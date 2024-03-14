@@ -4,7 +4,6 @@ const cors = require("cors");
 const loginRoute = require("./routes/loginRoute");
 const messageRoute = require("./routes/messagesRoute");
 const classroomRoute = require("./routes/classroomRoute");
-const todoRoute = require("./routes/TodoRoute");
 const socket = require("socket.io");
 const https = require("https");
 const fs = require("fs");
@@ -105,7 +104,6 @@ const ser = https.createServer(sslOptions, app);
 app.use("/api/auth", loginRoute);
 app.use("/api/messages", messageRoute);
 app.use("/api/classroom", classroomRoute);
-app.use("/api/todo",todoRoute);
 // app.use("",files);
 
 // const multer  = require('multer');

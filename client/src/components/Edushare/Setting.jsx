@@ -1,9 +1,9 @@
 import React from 'react'
 
-export default function Archived_class() {
+export default function Setting() {
   return (
     <div>
-      classes
+      Setting
     </div>
   )
 }
