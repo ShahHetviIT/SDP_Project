@@ -108,7 +108,7 @@ module.exports.deleteClassroom = async (req, res, next) => {
 //         console.error("Error deleting PDF:", error);
 //         res.status(500).json({ msg: "Internal server error" });
 //     }
-exports.deletePdf = async (req, res) => {
+module.exports.deletePdf = async (req, res) => {
   try {
     const classroom = await classroomModel.findById(req.params.id);
     if (!classroom) {

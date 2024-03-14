@@ -187,7 +187,8 @@ const Announcement = ({ updateMaterials }) => {
               <div>{item.description[pdfIndex]}</div>
             </div>
             <div className='pdfbtn'>
-            <button onClick={() => showPdf(pdfName, item.description)}><span>View PDF</span></button><RiDeleteBin6Line style={{fontSize: '23px', height: '50px', paddingLeft: '2px', cursor: 'pointer'}} onClick={()=>handleDeletePdf()}/>
+            <button onClick={() => showPdf(pdfName, item.description)}><span>View PDF</span></button>
+            
             </div>
           </div>
           <Divider />
