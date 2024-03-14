@@ -11,9 +11,9 @@ export default function Home() {
      <Header />
      <Navbar />
      
-        <div className='classcard'>
+        {/* <div className='classcard'>
           <Classcard />
-        </div>
+        </div> */}
      </div> 
   )
 }

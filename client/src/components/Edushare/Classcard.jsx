@@ -128,10 +128,10 @@ import Typography from '@mui/material/Typography';
 import { SiProtondrive } from "react-icons/si";
 import { BsPersonWorkspace } from "react-icons/bs";
 import '../../style/Classcard.css';
-import { Divider } from '@mui/material';
+import { Divider, Menu, MenuItem } from '@mui/material';
 import data from '../../data/data';
-import {getClassroomDetailsRoute} from "../../utils/APIRoutes"
-
+import { getClassroomDetailsRoute, deleteClassroomDetailsRoute } from "../../utils/APIRoutes"
+import { HiDotsVertical } from "react-icons/hi";
 export const fetchData = async () => {
   console.log("fetchData");
   try {
@@ -144,14 +144,15 @@ export const fetchData = async () => {
   }
 };
 
-export default function Classcard() {
+export default function Classcard({ refresh }) {
   const navigate = useNavigate();
   const [classroomDetails, setClassroomDetails] = useState([]);
   const [selectedClassroom, setSelectedClassroom] = useState(null);
-
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [archivedClassrooms, setArchivedClassrooms] = useState([]);
   useEffect(() => {
     fetchData().then(data => setClassroomDetails(data));
-  }, []);
+  }, [refresh]);
 
   const handleClick = (classroomData) => {
     const classroomDataJson = JSON.stringify(classroomData); // Convert to JSON
@@ -160,44 +161,72 @@ export default function Classcard() {
     setSelectedClassroom(classroomData);
     navigate(`/stream/:id`, { state: { classroomData } });
   }
+  const handleDelete = async (classroomData) => {
+    setClassroomDetails(classroomDetails.filter(classroom => classroom._id !== classroomData._id));
 
+    const id = classroomData._id;
+await axios.post(`${deleteClassroomDetailsRoute}/${id}`, { classroomData });
+
+    setArchivedClassrooms([...archivedClassrooms, classroomData]);
+    // Navigate to the archive_class route
+  
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+  const handleMenuClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
   return (
     <>
+
       {classroomDetails.map((classroom, index) => {
-        const randomImage = data[Math.floor(Math.random() * data.length)];
+        if (archivedClassrooms.findIndex(archivedClassroom => archivedClassroom._id === classroom._id) === -1) {
+          const randomImage = data[Math.floor(Math.random() * data.length)];
 
-        return (
+          return (
 
-          <Card key={index} sx={{ width: 345 }} className='card' onClick={() => handleClick(classroom)}>
+            <Card key={index} sx={{ width: 345 }} className='card'>
 
-            <CardMedia
-              className='media'
-              sx={{ height: 140 }}
-              image={require('../../Classcard/' + randomImage.name)}
-              title="Subject"
-              alt='unsplash image'
-            />
-            <Divider />
-            <CardContent>
-              <Typography gutterBottom variant="h5" component="div">
-                {classroom.classname}
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                Batch: H ans I
-              </Typography>
-            </CardContent>
-            <Divider />
-            <CardActions className='action'>
-              <div className='work'>
-                <BsPersonWorkspace />
-                <a href="https://www.google.com/intl/en_in/drive/">
-                  <SiProtondrive className='drive'/>
-                </a>
-              </div>
-            </CardActions>
-          </Card>
-
-        );
+              <CardMedia
+                className='media'
+                sx={{ height: 140 }}
+                image={require('../../Classcard/' + randomImage.name)}
+                title="Subject"
+                alt='unsplash image'
+              >
+                <div style={{ display: 'flex', justifyContent: 'flex-end', padding: '4px 8px' }}>
+                  <HiDotsVertical style={{ fontSize: '1.5rem', color: '#fff' }} onClick={handleMenuClick} />
+                </div>
+                <Menu
+                  anchorEl={anchorEl}
+                  open={Boolean(anchorEl)}
+                  onClose={handleClose}
+                >
+                  <MenuItem onClick={() => handleDelete(classroom)}>Archive</MenuItem>
+                </Menu>
+              </CardMedia>
+              <Divider />
+              <CardContent onClick={() => handleClick(classroom)}>
+                <Typography gutterBottom variant="h5" component="div">
+                  {classroom.classname}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Batch: H ans I
+                </Typography>
+              </CardContent>
+              <Divider />
+              <CardActions className='action'>
+                <div className='work'>
+                  <BsPersonWorkspace />
+                  <a href="https://www.google.com/intl/en_in/drive/">
+                    <SiProtondrive className='drive' />
+                  </a>
+                </div>
+              </CardActions>
+            </Card>
+          );
+        } return null
       })}
     </>
   );

@@ -1,0 +1,17 @@
+.calendar-container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  .fc-prev-button,
+  .fc-next-button {
+    background-color: blue;
+    color: white;
+  }
+
+  .calendar-container {
+    button:before, button:after {
+      width: max-content;
+      height: max-content;
+    }
+  }
+  

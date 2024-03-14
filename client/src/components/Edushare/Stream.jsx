@@ -113,7 +113,7 @@
 
 import React, { useState, useEffect } from 'react';
 import '../../style/Stream.css';
-import { AppBar, Button, Dialog, DialogActions, DialogContent, TextField, Toolbar, Typography } from '@mui/material';
+import { AppBar, Button, Dialog, DialogActions, DialogContent, TextField, Toolbar, Typography,CircularProgress } from '@mui/material';
 import Announcement from './Announcement';
 import { useLocation } from 'react-router-dom';
 import axios from 'axios';
@@ -132,7 +132,7 @@ function Stream() {
   const [currentUserImage, setCurrentUserImage] = useState(undefined);
   const [currentUserName, setCurrentUserName] = useState(undefined);
   const [currentImageType, setCurrentImageType] = useState(undefined);
-
+  const [isLoading, setIsLoading] = useState(false); 
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -169,7 +169,9 @@ function Stream() {
       setSelectedClassroom(classroomData.classname || '');
     }
   }, []);
-
+  const handleClose = () => {
+    setOpenDialog(false);
+  };
   const handleSubmit = async () => {
     try {
       const data = JSON.parse(sessionStorage.getItem("classroom-details"));
@@ -189,13 +191,16 @@ function Stream() {
           }
         }
       );
-
+      
       console.log('Announcement uploaded', response.data);
       setShowInput(false);
       setUpdateMaterials([...updateMaterials, response.data]);
     } catch (error) {
       console.error('Error uploading file:', error);
+    }finally{
+      setIsLoading(false);
     }
+    handleClose();
   };
 
   return (
@@ -270,7 +275,9 @@ function Stream() {
                   </DialogContent>
                   <DialogActions>
                     <Button onClick={() => setOpenDialog(false)} style={{width: '100px'}}>Cancel</Button>
-                    <Button color='primary' variant='contained' onClick={handleSubmit} style={{width: '100px'}}>Post</Button>
+                    <Button color='primary' variant='contained' onClick={handleSubmit} style={{width: '100px'}}>
+                    {isLoading ? <CircularProgress size={24} color="inherit" /> : 'Post'}
+                    </Button>
                   </DialogActions>
                 </Dialog>
               </div>
