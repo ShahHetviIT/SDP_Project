@@ -101,6 +101,7 @@ import { FaPlus } from "react-icons/fa";
 import Createroom from './Createroom';
 import Classcard from './Classcard';
 import {host} from '../../utils/APIRoutes';
+import Edushare from '../../assets/edushare.png'
 export default function Header() {
   const [isNavbarOpen, setIsNavbarOpen] = useState(false);
   const [currentUserImage, setCurrentUserImage] = useState(undefined);
@@ -156,6 +157,7 @@ export default function Header() {
       <div className='header1'>
         <div className='title1'>
           <GiHamburgerMenu className='header' onClick={() => setIsNavbarOpen(!isNavbarOpen)} />
+          <img style={{height:"2.8rem"}} src={Edushare} alt=''/>
           <header className='heading'>EduShare</header>
         </div>
         <div className='title1'>

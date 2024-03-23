@@ -82,7 +82,7 @@ export default function SetProfileImage() {
             />
           </div>
           <div className="file-input-container">
-            <button onClick={handleUpload}>Upload Image</button>
+            <button style={{marginTop:"0px",padding:"0 15px",width:"350px"}} onClick={handleUpload}>Upload Image</button>
           </div>
         </div>
       </div>
@@ -95,15 +95,17 @@ const Container = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 15px;
+    gap: 30px;
+    flex-wrap: wrap;
   }
   .file-input {
+    background-color: #131324;
     display: flex;
     height: 100vh;
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    gap: 20px;
+    gap: 50px;
   }
 
   .file-input-container {
@@ -123,9 +125,17 @@ const Container = styled.div`
   .file-input-container label {
     background-color: #3498db;
     color: white;
-    padding: 10px 20px;
+    padding: 10px 0px;
     cursor: pointer;
-    display: inline-block;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-family: 'Muli-SemiBold';
+    width: 350px;
+    align-items: center;
+    justify-content: center;
   }
 
   .image {

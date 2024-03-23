@@ -118,7 +118,7 @@ import Announcement from './Announcement';
 import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 import {uploadFilesClassroom,host} from '../../utils/APIRoutes';
-
+import Edushare from '../../assets/edushare.png';
 function Stream() {
   const [selectedClassroom, setSelectedClassroom] = useState(null);
   const [showInput, setShowInput] = useState(false);
@@ -207,6 +207,7 @@ function Stream() {
     <div className='main1'>
       <AppBar position="static" style={{position:'fixed', width:'100%', zIndex:'1'}}>
         <Toolbar className='header2'>
+        <img style={{height:"2.8rem"}} src={Edushare} alt=''/>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }} margin='15px' fontSize='2em'>
             {selectedClassroom}
           </Typography>
