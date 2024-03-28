@@ -199,6 +199,7 @@ function Stream() {
         const className = data.classname;
         // console.log(className);
       const email = axios.post(emailRoute,{fileName,className});
+      console.log(email);
     } catch (error) {
       console.error('Error uploading file:', error);
     }finally{
