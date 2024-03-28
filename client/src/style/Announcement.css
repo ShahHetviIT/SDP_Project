@@ -54,6 +54,7 @@
     border-radius: 5px;
     cursor: pointer;
     width: max-content;
+    z-index: 0;
   }
   
   .amt__top button:hover {
