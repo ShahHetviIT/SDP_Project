@@ -32,3 +32,5 @@ export const createTodoDetails =`${host}/api/todo/createTodoDetails`;
 export const updateTodoDetails = `${host}/api/todo/updateTodoDetails/:id`;
 export const deleteTodoDetails = `${host}/api/todo/deleteTodoDetails/:id`;
 export const getArchiveClassroomDetailsRoute = `${host}/api/classroom/getArchiveClassroomDetails`;
+
+export const emailRoute = `${host}/api/email/sendEmail`;
