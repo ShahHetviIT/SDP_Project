@@ -8,6 +8,7 @@ const todoRoute = require("./routes/TodoRoute");
 const socket = require("socket.io");
 const https = require("https");
 const fs = require("fs");
+const emailRoute = require("./routes/emailRoute");
 
 
 const pdfTemplete = require('./documents/index');
@@ -106,6 +107,7 @@ app.use("/api/auth", loginRoute);
 app.use("/api/messages", messageRoute);
 app.use("/api/classroom", classroomRoute);
 app.use("/api/todo",todoRoute);
+app.use("/api/email",emailRoute);
 // app.use("",files);
 
 // const multer  = require('multer');

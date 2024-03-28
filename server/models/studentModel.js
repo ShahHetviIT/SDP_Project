@@ -9,6 +9,7 @@ const studentSchema = new mongoose.Schema({
   isProfileImageSet: Boolean,
   role: { type: String, default: "student" },
   EnrollmentYear: Number,
+  Email: String,
 });
 
 const StudentModel = mongoose.model("students", studentSchema);

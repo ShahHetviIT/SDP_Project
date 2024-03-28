@@ -117,7 +117,7 @@ import { AppBar, Button, Dialog, DialogActions, DialogContent, TextField, Toolba
 import Announcement from './Announcement';
 import { useLocation } from 'react-router-dom';
 import axios from 'axios';
-import {uploadFilesClassroom,host} from '../../utils/APIRoutes';
+import {uploadFilesClassroom,host,emailRoute} from '../../utils/APIRoutes';
 import Edushare from '../../assets/edushare.png';
 function Stream() {
   const [selectedClassroom, setSelectedClassroom] = useState(null);
@@ -195,6 +195,10 @@ function Stream() {
       console.log('Announcement uploaded', response.data);
       setShowInput(false);
       setUpdateMaterials([...updateMaterials, response.data]);
+      const fileName = file.name;
+        const className = data.classname;
+        // console.log(className);
+      const email = axios.post(emailRoute,{fileName,className});
     } catch (error) {
       console.error('Error uploading file:', error);
     }finally{
