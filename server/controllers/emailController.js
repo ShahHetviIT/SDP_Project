@@ -31,7 +31,7 @@ module.exports.sendMail = async (req, res, next) => {
         to: student.Email, // Use the student's email address from the database
         subject: "Hello " + student.username, // Subject line
         text: "Dear " + student.username + ",\n\nThis is a test email from Mentor Mingle.", // Plain text body
-        html: "<b>Dear " + student.username + ",</b><br><br>I hope this email finds you well. I wanted to share some important information regarding our class <br><br>Material named " + fileName + " is uploaded in " + className + " classroom <br><br> Please review the attached PDF for more details. If you have any questions or need further clarification, feel free to reach out.", // HTML body
+        html: "<b>Dear " + student.username + ",</b><br><br>I hope this email finds you well. I wanted to share some important information regarding our class <br><br>Material named <b>" + fileName + "</b> is uploaded in " + className + " classroom <br><br> Please review the attached PDF for more details. If you have any questions or need further clarification, feel free to reach out.", // HTML body
       });
 
       console.log("Message sent to " + student.username + " at " + student.Email);
