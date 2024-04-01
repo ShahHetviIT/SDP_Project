@@ -191,7 +191,7 @@ const Announcement = ({ updateMaterials }) => {
             
             </div>
           </div>
-          <Divider />
+          <Divider style={{borderColor:"rgba(0, 0, 0, 0.5)"}} />
         </div>
       ))
     )}
