@@ -6,7 +6,7 @@ import axios from "axios";
 import { sendMessageRoute, recieveMessageRoute } from "../../utils/APIRoutes";
 import { v4 as uuidv4 } from "uuid";
 import { Link } from "react-router-dom";
-import {getFilesMessages,host} from "../../utils/APIRoutes";
+import { getFilesMessages, host } from "../../utils/APIRoutes";
 
 export default function ChatContainer({ currentChat, currentUser, socket }) {
   const [messages, setMessages] = useState([]);
@@ -89,14 +89,16 @@ export default function ChatContainer({ currentChat, currentUser, socket }) {
     const data = await JSON.parse(sessionStorage.getItem("user"));
     try {
       // Remove the loading message from the state
-      setMessages((prevState) => prevState.filter((message) => message.message !== "Loading..."));
-  
+      setMessages((prevState) =>
+        prevState.filter((message) => message.message !== "Loading...")
+      );
+
       // Add the actual message to the state
       setMessages((prevState) => [
         ...prevState,
         { fromSelf: true, message: msg },
       ]);
-  
+
       if (socket.current && socket.current.connected) {
         console.log("msg send");
         socket.current.emit("send-msg", {
@@ -110,7 +112,6 @@ export default function ChatContainer({ currentChat, currentUser, socket }) {
       console.error("Error sending message:", err);
     }
   };
-  
 
   useEffect(() => {
     getPdf();
@@ -118,9 +119,7 @@ export default function ChatContainer({ currentChat, currentUser, socket }) {
 
   // Correct
   const getPdf = async () => {
-    const result = await axios.get(
-      getFilesMessages
-    );
+    const result = await axios.get(getFilesMessages);
     console.log(result.data.data);
     setAllImage(result.data.data);
   };
@@ -230,9 +229,8 @@ export default function ChatContainer({ currentChat, currentUser, socket }) {
           <div className="chat-messages">
             {messages.length > 0 ? (
               messages.map((message) => {
-                const isFileAttachment = /\.(pdf|jpg|png|docx|txt|zip|ppt)$/i.test(
-                  message.message
-                );
+                const isFileAttachment =
+                  /\.(pdf|jpg|png|docx|txt|zip|ppt)$/i.test(message.message);
 
                 let imageData = null;
                 let imagename = null;
@@ -294,6 +292,22 @@ const Container = styled.div`
   grid-template-rows: 10% 80% 10%;
   gap: 0.1rem;
   overflow: hidden;
+
+  /* WebKit Scrollbar Styles */
+  .chat-messages::-webkit-scrollbar {
+    width: 0px; /* Width of the scrollbar */
+  }
+
+  /* Track (background) of the scrollbar */
+  .chat-messages::-webkit-scrollbar-track {
+    background-color: transparent; /* Transparent background */
+  }
+
+  /* Handle (thumb) of the scrollbar */
+  .chat-messages::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0); /* Transparent with a slight tint */
+    border-radius: 5px; /* Rounded corners */
+  }
 
   .dashboard-link {
     display: flex;
