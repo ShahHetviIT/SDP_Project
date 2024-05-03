@@ -35,6 +35,21 @@ export default function AttendanceTeacher() {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        if (!sessionStorage.getItem("user")) {
+          //console.log("logon");
+          navigate("/login");
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+
+    fetchData();
+  }, [navigate]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
         const data = await JSON.parse(sessionStorage.getItem("user"));
         if (data.isAvatarImageSet) {
           setCurrentUserName(data.username);
