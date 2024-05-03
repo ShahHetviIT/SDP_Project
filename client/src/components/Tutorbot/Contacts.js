@@ -238,7 +238,7 @@ export default function Contacts({
           <Container>
             <div className="brand">
               <img src={TutorBot} alt="logo" />
-              <h3>Mentor Mingle</h3>
+              <h3>TutorBot</h3>
             </div>
             <div className="contacts">
               <div className="contactsList">
